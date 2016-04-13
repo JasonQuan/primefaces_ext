@@ -13,7 +13,7 @@ public abstract class PrimefacesExtEJB<T extends AbstractEntity, E extends Abstr
 
     private static final long serialVersionUID = 1L;
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "demo")
     private EntityManager em;
 
     @Override
