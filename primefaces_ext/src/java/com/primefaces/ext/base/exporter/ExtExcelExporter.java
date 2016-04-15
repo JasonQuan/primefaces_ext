@@ -45,7 +45,6 @@ public class ExtExcelExporter extends ExcelExporter {
                 return "";
             }
         } else if (component instanceof ValueHolder) {
-
             if (component instanceof EditableValueHolder) {
                 Object submittedValue = ((EditableValueHolder) component).getSubmittedValue();
                 if (submittedValue != null) {

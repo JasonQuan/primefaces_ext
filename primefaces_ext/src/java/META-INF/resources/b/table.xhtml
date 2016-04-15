@@ -193,13 +193,13 @@
                         <p:menuitem value="Export All" rendered="#{cc.attrs.exportALl}"                                    
                                     icon="ui-icon-arrowthick-1-s"
                                     ajax="false" immediate="true">
-                            <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPageOnly}" selectionOnly="#{cc.attrs.exportSelectionOnly}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
+                            <pe:exporter target="entity_table" type="xlsx" fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                             <p:fileDownload value="#{cc.attrs.controller.excel}"/>
                         </p:menuitem>
                         <p:menuitem value="Export Page" rendered="#{cc.attrs.exportPageOnly}"
                                     icon="ui-icon-arrowthick-1-s"
                                     ajax="false" immediate="true">
-                            <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPageOnly}" selectionOnly="#{cc.attrs.exportSelectionOnly}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
+                            <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPageOnly}" fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                         </p:menuitem>
                         <p:menuitem value="Export Selection" rendered="#{cc.attrs.exportSelectionOnly}"
                                     icon="ui-icon-arrowthick-1-s"
@@ -476,7 +476,9 @@
                                 </c:if>
                             </f:facet>
                             <f:facet name="output">
-                                <p:selectBooleanCheckbox rendered="#{column.isBoolean}" value="#{entity[column.field]}"/> 
+                                <h:outputText rendered="#{column.isBoolean}" value="#{entity[column.field]}">
+                                    <f:converter converterId="com.primefaces.ext.converter.BooleanConverter"/>
+                                </h:outputText> 
                                 <h:outputText style="#{column.style}" rendered="#{column.isString}" value="#{entity[column.field]}" />
                                 <b:outputDate rendered="#{column.isDate}" value="#{entity[column.field]}" pattern="#{column.outFormat}"/>
                                 <h:outputText style="#{column.style}" rendered="#{column.isInteger}" value="#{entity[column.field]}" >
