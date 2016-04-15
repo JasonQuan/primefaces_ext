@@ -21,9 +21,11 @@ public abstract class PrimefacesExtEJB<T extends AbstractEntity, E extends Abstr
     @Override
     protected EntityManager getEntityManager() {
         try {
-            em = services.get().getEntityManager();
             if (em == null) {
-                throw new Exception("null EntityManager found");
+                em = services.get().getEntityManager();
+                if (em == null) {
+                    throw new Exception("null EntityManager found");
+                }
             }
         } catch (Exception e) {
             logger.error("TODO: message");

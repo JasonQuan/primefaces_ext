@@ -288,9 +288,9 @@ public class BaseColumnModelSB extends PrimefacesExtEJB<BaseColumnModel, BaseCol
         }
     }
 
-    private BaseColumnModel findByEntityAndFieldAndCustomKey(String entity, String field, String adefault) {
+    private BaseColumnModel findByEntityAndFieldAndCustomKey(String entity, String field, String customsKey) {
         String jpql = "select o from " + BaseColumnModel.class.getSimpleName() + " o where o.entity = '" + entity + "' and o.field='" + field
-                + "' and o.customsKey ='" + adefault + "'";
+                + "' and o.customsKey ='" + customsKey + "'";
         return super.findSingleByJPQL(jpql);
     }
 

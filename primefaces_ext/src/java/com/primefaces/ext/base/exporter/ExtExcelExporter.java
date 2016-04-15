@@ -21,13 +21,11 @@ public class ExtExcelExporter extends ExcelExporter {
     @Override
     protected String exportValue(FacesContext context, UIComponent component) {
         if (component instanceof UIPanel) {
-            String headerValue = null;
-            String header = "";
-            for (UIComponent child : component.getChildren()) {
-                headerValue = exportValue(context, child);
-                header = header + headerValue;
+            String text = "";
+            for (UIComponent child : component.getChildren()) {                
+                text += exportValue(context, child);
             }
-            return headerValue;
+            return text;
         } else if (component instanceof HtmlCommandLink) {
             HtmlCommandLink link = (HtmlCommandLink) component;
             Object value = link.getValue();
