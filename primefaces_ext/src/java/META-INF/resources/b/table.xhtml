@@ -3,6 +3,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:cc="http://xmlns.jcp.org/jsf/composite"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/ext"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://java.sun.com/jsf/composite/b"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
@@ -22,8 +23,8 @@
     
     bug:
     component:<p:datatable>
-    error on: <rows="#{cc.attrs.rows}>
-    error message:< rows="#{cc.attrs.rows}": The class 'com.sun.faces.el.CompositeComponentAttributesELResolver$ExpressionEvalMap' does not have the property 'rows'.>
+    error on: <rows="#{ cc.attrs.rows}>
+    error message:< rows="#{ cc.attrs.rows}": The class 'com.sun.faces.el.CompositeComponentAttributesELResolver$ExpressionEvalMap' does not have the property 'rows'.>
     error from:<primefaces bug>
     -->
     <cc:interface>
@@ -55,6 +56,9 @@
         <cc:attribute name="exportALl" type="java.lang.Boolean" default="false" shortDescription="TODO: data body"/>
         <cc:attribute name="exportPage" type="java.lang.Boolean" default="false" shortDescription="TODO: data body"/>
         <cc:attribute name="exportSelect" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>
+        <cc:attribute name="exportName" type="java.lang.String" default="export file" shortDescription="TODO:"/>
+        <cc:attribute name="exportPageOnly" type="java.lang.Boolean" default="true" shortDescription="TODO:"/>
+        <cc:attribute name="exportSelectionOnly" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>
         <cc:attribute name="globalFilter" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>            
         <cc:attribute name="freezeColumns" type="java.lang.Boolean" default="false" shortDescription="TODO:full test"/>
         <cc:attribute name="freezeScrollbar" type="java.lang.String" default="autoHide:0" shortDescription="must json format,support"/>
@@ -132,7 +136,7 @@
                                 actionListener="# { cc.attrs.controller.updateColumns}"/>
            </h:panelGroup>
         -->
- 
+
         <p:dataTable id="entity_table"
                      var="entity"
                      value="#{cc.attrs.controller.dataModel}" 
@@ -143,7 +147,7 @@
                      rowKey="#{entity.id}" 
                      style="#{cc.attrs.style}"
                      editMode="cell"
-                     editable="true"
+                     editable="#{cc.attrs.cellEdit}"                     
                      filterEvent="enter"
                      paginator="true"
                      sortOrder="descending"
@@ -173,7 +177,7 @@
                             <f:selectItem itemValue="4" itemLabel="4"/>
                         </h:selectOneMenu>
                     </c:if> 
-                    <p:menuButton value="Options">
+                    <p:splitButton value="Options">
                         <p:menuitem rendered="#{cc.attrs.addOne}" value="Add One" 
                                     actionListener="#{cc.attrs.controller.newEmptyEntity()}"
                                     process="@this" update="entity_table,:growl"/>
@@ -186,25 +190,30 @@
                         <p:menuitem value="Remove Select" rendered="#{cc.attrs.removeSelect}"
                                     actionListener="#{cc.attrs.controller.batchRemoveByIds}"
                                     process="@this" update="entity_table,:growl"/>
-                        <p:menuitem value="Export All" rendered="#{cc.attrs.exportALl}" 
+                        <p:menuitem value="Export All" rendered="#{cc.attrs.exportALl}"                                    
                                     icon="ui-icon-arrowthick-1-s"
-                                    ajax="false" immediate="true"
-                                    actionListener="#{cc.attrs.controller.exportAllData}">
+                                    ajax="false" immediate="true">
+                            <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPageOnly}" selectionOnly="#{cc.attrs.exportSelectionOnly}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                             <p:fileDownload value="#{cc.attrs.controller.excel}"/>
                         </p:menuitem>
-                        <p:menuitem value="Export Page" rendered="#{cc.attrs.exportPage}" 
+                        <p:menuitem value="Export Page" rendered="#{cc.attrs.exportPageOnly}"
                                     icon="ui-icon-arrowthick-1-s"
-                                    ajax="false" immediate="true"
-                                    actionListener="#{cc.attrs.controller.exportPageData}">
-                            <p:fileDownload value="#{cc.attrs.controller.excel}"/>
+                                    ajax="false" immediate="true">
+                            <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPageOnly}" selectionOnly="#{cc.attrs.exportSelectionOnly}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                         </p:menuitem>
+                        <p:menuitem value="Export Selection" rendered="#{cc.attrs.exportSelectionOnly}"
+                                    icon="ui-icon-arrowthick-1-s"
+                                    ajax="false" immediate="true">
+                            <pe:exporter target="entity_table" type="xlsx" selectionOnly="#{cc.attrs.exportSelectionOnly}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
+                        </p:menuitem>
+
                         <p:menuitem value="Export Selected" rendered="#{cc.attrs.exportSelect}" 
                                     icon="ui-icon-arrowthick-1-s"
                                     ajax="false" immediate="true"
                                     actionListener="#{cc.attrs.controller.exportSelectData}">
                             <p:fileDownload value="#{cc.attrs.controller.excel}"/>
                         </p:menuitem>
-                    </p:menuButton>  
+                    </p:splitButton>  
                 </h:panelGroup>
                 <h:panelGroup rendered="#{cc.attrs.globalFilter}" style="float:right;">
                     <!--TODO: globalFilter-->
@@ -500,7 +509,7 @@
             </p:column>
             <cc:insertChildren/>            
         </p:dataTable>
-        <p:blockUI block="entity_table" trigger="entity_table" blocked="false" animate="true">
+        <p:blockUI block="entity_table" widgetVar="blockUI" trigger="entity_table" blocked="false" animate="true">
             LOADING...<br />
             <p:graphicImage library="img" name="ajaxloadingbar.gif"/>
         </p:blockUI>

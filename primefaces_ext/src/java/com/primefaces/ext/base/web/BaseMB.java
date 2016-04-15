@@ -23,7 +23,6 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.persistence.metamodel.SingularAttribute;
 
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
@@ -45,6 +44,15 @@ import com.primefaces.ext.base.util.MessageBundle;
 import com.primefaces.ext.base.util.ObjectUtil;
 import com.primefaces.ext.base.web.view.dao.BaseColumnModelSB;
 import com.primefaces.ext.base.web.view.entity.BaseColumnModel;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 /**
  *
@@ -973,8 +981,11 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
     }
 
     public List<BaseColumnModel> defaultColumns;
-    public StreamedContent excel;
+    public StreamedContent excel;//TODO: remove
 
+    /**
+     * @deprecated TODO: remove
+     */
     public void exportAllData() {
         excel = null;
         List<E> exportData = dao().getExportAllLazyDataModelData();
@@ -982,7 +993,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
     }
 
     /**
-     * testing
+     * @deprecated
      */
     private void exportXLS(List<? extends AbstractEntity> exportData) {
         if (null == exportData || exportData.size() <= 0) {
@@ -990,7 +1001,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
         }
         String fileName = getExcelFileName();
         try {
-            SXSSFWorkbook sxwb = null;// POIUtils.generateSXSS(this.columns, exportData);
+            SXSSFWorkbook sxwb = null;//POIUtils.generateSXSS(this.columns, exportData);
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             sxwb.write(outputStream);
@@ -1006,6 +1017,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
         } catch (Exception e) {
             logger.error("Generate file " + fileName + " encounter error :");
             logger.error(e);
+            e.printStackTrace();
             MessageBundle.showError("download error");
         }
     }
@@ -1048,4 +1060,33 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
     public int getRows(int rows) {
         return rows;
     }
+
+    public void postExportExcel(Object doc) {
+        HSSFWorkbook wb = (HSSFWorkbook) doc;
+        HSSFSheet sheet = wb.getSheetAt(0);
+
+        HSSFCellStyle styleHeader = wb.createCellStyle();
+        styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        styleHeader.setFillForegroundColor(HSSFColor.GREY_40_PERCENT.index);
+        styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+        styleHeader.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        styleHeader.setWrapText(true);
+
+        HSSFCellStyle sheetStyle = wb.createCellStyle();
+        sheetStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        sheetStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+
+        HSSFRow row0 = sheet.getRow(0);
+        row0.setHeight((short) 600);
+        for (int c = 0; c < row0.getPhysicalNumberOfCells(); c++) {
+            sheet.autoSizeColumn(c, true);
+            HSSFCell header = row0.getCell(c);
+            if (header.getStringCellValue().contains("<br>")) {
+                header.setCellValue(new HSSFRichTextString(row0.getCell(c).getStringCellValue().replaceAll("<br>", "\r\n")));
+            }
+            header.setCellStyle(styleHeader);
+        }
+
+    }
+
 }
