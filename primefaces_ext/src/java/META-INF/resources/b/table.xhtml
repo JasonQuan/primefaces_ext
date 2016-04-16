@@ -332,7 +332,7 @@
                                             <f:converter converterId="javax.faces.Boolean" />
                                             <f:selectItem itemValue="" itemLabel="A" noSelectionOption="true" itemDescription="clean filter on this column"/>
                                             <f:selectItem itemValue="true" itemLabel="Yes"/>
-                                            <f:selectItem itemValue="false" itemLabel="No"/>		                                                             
+                                            <f:selectItem itemValue="false" itemLabel="No"/>
                                         </p:selectOneButton>
                                     </c:if>
                                 </c:if>
@@ -374,7 +374,7 @@
                                     <f:selectItems value="#{cc.attrs.controller[column.dropDown]}"/>
                                     <p:ajax event="change"
                                             process="@this"
-                                            update=":growl"
+                                            update="#{column.onupdate}"
                                             listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                 </h:selectOneMenu>
                                 <c:if test="#{!column.hasDropDown}">
@@ -384,7 +384,7 @@
                                         value="#{entity[column.field]}">
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:inputText>
                                     <p:autoComplete rendered="#{column.isString and column.hasAutoComplete}"
@@ -393,11 +393,11 @@
                                                     completeMethod="#{cc.attrs.controller.callCompleteMethod(column.autoComplete,entity[column.field])}">
                                         <p:ajax event="itemSelect" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:autoComplete>
                                     <p:selectBooleanCheckbox
@@ -406,7 +406,7 @@
                                         value="#{entity[column.field]}"> 
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:selectBooleanCheckbox>
                                     <p:inputText
@@ -415,7 +415,7 @@
                                         value="#{entity[column.field]}">
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:inputText> 
                                     <p:inputText
@@ -424,7 +424,7 @@
                                         value="#{entity[column.field]}">
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:inputText>                         
                                     <p:calendar
@@ -434,7 +434,7 @@
                                         value="#{entity[column.field]}">
                                         <p:ajax event="dateSelect" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:calendar>
                                     <p:inputText
@@ -443,7 +443,7 @@
                                         value="#{entity[column.field]}">
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:inputText>                               
                                     <p:inputText
@@ -452,7 +452,7 @@
                                         value="#{entity[column.field]}">
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:inputText>                               
                                     <p:inputText
@@ -461,7 +461,7 @@
                                         value="#{entity[column.field]}">
                                         <p:ajax event="change" 
                                                 process="@this"
-                                                update=":growl"
+                                                update="#{column.onupdate}"
                                                 listener="#{cc.attrs.controller.cellEdit(entity.id, column.field,entity[column.field])}"/>
                                     </p:inputText>
                                 </c:if>
