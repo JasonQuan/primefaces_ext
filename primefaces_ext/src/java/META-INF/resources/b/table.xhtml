@@ -57,8 +57,6 @@
         <cc:attribute name="exportPage" type="java.lang.Boolean" default="false" shortDescription="TODO: data body"/>
         <cc:attribute name="exportSelect" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>
         <cc:attribute name="exportName" type="java.lang.String" default="export file" shortDescription="TODO:"/>
-        <cc:attribute name="exportPageOnly" type="java.lang.Boolean" default="true" shortDescription="TODO:"/>
-        <cc:attribute name="exportSelectionOnly" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>
         <cc:attribute name="globalFilter" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>            
         <cc:attribute name="freezeColumns" type="java.lang.Boolean" default="false" shortDescription="TODO:full test"/>
         <cc:attribute name="freezeScrollbar" type="java.lang.String" default="autoHide:0" shortDescription="must json format,support"/>
@@ -196,22 +194,15 @@
                             <pe:exporter target="entity_table" type="xlsx" fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                             <p:fileDownload value="#{cc.attrs.controller.excel}"/>
                         </p:menuitem>
-                        <p:menuitem value="Export Page" rendered="#{cc.attrs.exportPageOnly}"
+                        <p:menuitem value="Export Page" rendered="#{cc.attrs.exportPage}"
                                     icon="ui-icon-arrowthick-1-s"
                                     ajax="false" immediate="true">
-                            <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPageOnly}" fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
+                            <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPage}" fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                         </p:menuitem>
-                        <p:menuitem value="Export Selection" rendered="#{cc.attrs.exportSelectionOnly}"
+                        <p:menuitem value="Export Selection" rendered="#{cc.attrs.exportSelect}"
                                     icon="ui-icon-arrowthick-1-s"
                                     ajax="false" immediate="true">
-                            <pe:exporter target="entity_table" type="xlsx" selectionOnly="#{cc.attrs.exportSelectionOnly}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
-                        </p:menuitem>
-
-                        <p:menuitem value="Export Selected" rendered="#{cc.attrs.exportSelect}" 
-                                    icon="ui-icon-arrowthick-1-s"
-                                    ajax="false" immediate="true"
-                                    actionListener="#{cc.attrs.controller.exportSelectData}">
-                            <p:fileDownload value="#{cc.attrs.controller.excel}"/>
+                            <pe:exporter target="entity_table" type="xlsx" selectionOnly="#{cc.attrs.exportSelect}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                         </p:menuitem>
                     </p:splitButton>  
                 </h:panelGroup>
@@ -504,7 +495,7 @@
 
                 </c:if>                            
             </c:forEach>
-            <p:column rendered="#{cc.attrs.deleteRow}">
+            <p:column rendered="#{cc.attrs.deleteRow}" exportable="false">
                 <p:commandLink value="delete"
                                actionListener="#{cc.attrs.controller.remove(entity)}"
                                process="entity_table" update="entity_table,:growl"/>

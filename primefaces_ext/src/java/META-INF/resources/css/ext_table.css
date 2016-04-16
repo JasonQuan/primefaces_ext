@@ -84,6 +84,9 @@
 .ui-cell-editor-output{
     text-align: center;
 }
+.ui-cell-editor-output *,.ui-column-title,.ui-column-customfilter{
+    white-space: nowrap;
+}
 .ui-datatable-header {
     height: 20px;
 }
