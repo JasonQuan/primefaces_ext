@@ -116,6 +116,13 @@ public class BaseColumnModelSB extends PrimefacesExtEJB<BaseColumnModel, BaseCol
             cm.setField(fields[i]);
             cm.setDataType(fieldMapping.get(fields[i]).getValue());
 
+            if(cm.getIsBoolean()){
+                cm.setConverterId("com.primefaces.ext.converter.BooleanConverter");
+            }
+            if(cm.getIsDate()){
+                cm.setConverterId("javax.faces.DateTime");
+                cm.setOutFormat("yyyy/MM/dd HH:mm:ss");
+            }
             cm.setEntity(entity);
             cm.setHeader(column.replaceAll("_", " ").replace("\"", ""));
             cm.setTableColumn(column);
@@ -273,7 +280,9 @@ public class BaseColumnModelSB extends PrimefacesExtEJB<BaseColumnModel, BaseCol
             if (StringUtils.isNotBlank(ch.outFormat())) {
                 cm.setOutFormat(ch.outFormat());
             }
-
+            if (StringUtils.isNotBlank(ch.converterId())) {
+                cm.setConverterId(ch.converterId());
+            }
         }
         return cm;
     }

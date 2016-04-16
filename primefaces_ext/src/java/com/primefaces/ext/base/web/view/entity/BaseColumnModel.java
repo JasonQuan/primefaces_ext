@@ -228,6 +228,9 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
     private String ajaxUpdate;
     @Column(name = "INCLUDE")
     private String include;
+    @ColumnHelper
+    @Column(name = "CONVERTERID")
+    private String converterId;
 
     @Transient
     private Boolean hasInclude;
@@ -938,5 +941,17 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
 
     public void setGroup(String group) {
         this.group = group;
+    }
+
+    public String getConverterId() {
+        return converterId;
+    }
+
+    public void setConverterId(String converterId) {
+        this.converterId = converterId;
+    }
+    
+    public boolean hasConverterId(){
+        return StringUtils.isNotBlank(converterId);
     }
 }

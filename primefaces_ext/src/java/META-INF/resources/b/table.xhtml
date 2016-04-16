@@ -343,27 +343,10 @@
                         </f:facet>
 
                         <c:if test="#{!cc.attrs.cellEdit}">
-                            <b:outputDate rendered="#{column.isDate}" value="#{entity[column.field]}" pattern="#{column.outFormat}"/>
-                            <p:selectBooleanCheckbox rendered="#{column.isBoolean}" disabled="true" value="#{entity[column.field]}"/> 
-
-                            <h:outputText style="#{column.style}" rendered="#{column.isString}" value="#{entity[column.field]}"/>
-
-                            <h:outputText style="#{column.style}" rendered="#{column.isInteger}" value="#{entity[column.field]}">
-                                <c:if test="#{column.hasOutFormat}">	                    
-                                    <f:convertNumber pattern="#{column.outFormat}"/>
+                            <h:outputText style="#{column.style}" value="#{entity[column.field]}">
+                                <c:if test="#{column.hasConverterId()}">	                    
+                                    <f:converter parent="#{column.outFormat}" converterId="#{column.converterId}"/>
                                 </c:if>
-                            </h:outputText>
-                            <h:outputText style="#{column.style}" rendered="#{column.isShort}" value="#{entity[column.field]}" />
-                            <h:outputText style="#{column.style}" rendered="#{column.isCharacter}" value="#{entity[column.field]}" />
-                            <h:outputText style="#{column.style}" rendered="#{column.isBigInteger}" value="#{entity[column.field]}" >
-                                <c:if test="#{column.hasOutFormat}">	                    
-                                    <f:convertNumber pattern="#{column.outFormat}"/>
-                                </c:if>
-                            </h:outputText>
-                            <h:outputText style="#{column.style}" rendered="#{column.isBigDecimal}" value="#{entity[column.field]}" >
-                                <c:if test="#{column.hasOutFormat}">	                    
-                                    <f:convertNumber pattern="#{column.outFormat}"/>
-                                </c:if>	                    
                             </h:outputText>
                         </c:if>
 
@@ -467,28 +450,11 @@
                                 </c:if>
                             </f:facet>
                             <f:facet name="output">
-                                <h:outputText rendered="#{column.isBoolean}" value="#{entity[column.field]}">
-                                    <f:converter converterId="com.primefaces.ext.converter.BooleanConverter"/>
-                                </h:outputText> 
-                                <h:outputText style="#{column.style}" rendered="#{column.isString}" value="#{entity[column.field]}" />
-                                <b:outputDate rendered="#{column.isDate}" value="#{entity[column.field]}" pattern="#{column.outFormat}"/>
-                                <h:outputText style="#{column.style}" rendered="#{column.isInteger}" value="#{entity[column.field]}" >
-                                    <c:if test="#{column.hasOutFormat}">	                    
-                                        <f:convertNumber pattern="#{column.outFormat}"/>
-                                    </c:if>                            
-                                </h:outputText>
-                                <h:outputText style="#{column.style}" rendered="#{column.isShort}" value="#{entity[column.field]}" />
-                                <h:outputText style="#{column.style}" rendered="#{column.isCharacter}" value="#{entity[column.field]}" />
-                                <h:outputText style="#{column.style}" rendered="#{column.isBigInteger}" value="#{entity[column.field]}" >
-                                    <c:if test="#{column.hasOutFormat}">	                    
-                                        <f:convertNumber pattern="#{column.outFormat}"/>
-                                    </c:if>                            
-                                </h:outputText>
-                                <h:outputText style="#{column.style}" rendered="#{column.isBigDecimal}" value="#{entity[column.field]}" >
-                                    <c:if test="#{column.hasOutFormat}">	                    
-                                        <f:convertNumber pattern="#{column.outFormat}"/>
-                                    </c:if>                            
-                                </h:outputText>
+                                <h:outputText style="#{column.style}" value="#{entity[column.field]}">
+                                    <c:if test="#{column.hasConverterId()}">	                    
+                                        <f:converter parent="#{column.outFormat}" converterId="#{column.converterId}"/>
+                                    </c:if>
+                                </h:outputText>                                 
                             </f:facet>
                         </p:cellEditor>
                     </p:column>

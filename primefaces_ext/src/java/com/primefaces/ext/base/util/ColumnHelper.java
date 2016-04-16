@@ -77,4 +77,6 @@ public @interface ColumnHelper {
 	boolean isMultiFilter() default false;
 
 	boolean sortable() default true;
+        
+	String converterId() default "";
 }
