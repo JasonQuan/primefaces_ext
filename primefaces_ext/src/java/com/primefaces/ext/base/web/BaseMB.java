@@ -44,6 +44,7 @@ import com.primefaces.ext.base.util.MessageBundle;
 import com.primefaces.ext.base.util.ObjectUtil;
 import com.primefaces.ext.base.web.view.dao.BaseColumnModelSB;
 import com.primefaces.ext.base.web.view.entity.BaseColumnModel;
+import com.primefaces.ext.base.web.view.entity.BaseColumnModel_;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -646,7 +647,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
             // TODO: change to batch update
             for (String order : orders) {
                 condations = order.split("-");
-                columnModelDao.update(condations[0], "SORT", condations[1]);
+                columnModelDao.update(condations[0], BaseColumnModel_.sort, condations[1]);
             }
             initViewColums();
             MessageBundle.showInfo("order sucessful");
@@ -729,7 +730,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
             for (String id : ids) {
                 String[] ic = id.split("-");
                 if (ic.length == 2) {
-                    columnModelDao.update(ic[0], "width", ic[1] + "px");
+                    columnModelDao.update(ic[0], BaseColumnModel_.width, ic[1] + "px");
                 } else {
                     logger.warn("onColumnResize id: " + id);
                 }
@@ -930,7 +931,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
             for (BaseColumnModel bcm2 : allColumns) {
                 if (source.get(i).equals(bcm2)) {
                     ids.append(",'").append(bcm2.getId()).append("'");
-                    columnModelDao.update(bcm2.getId(), "SORT", String.valueOf(i));
+                    columnModelDao.update(bcm2.getId(), BaseColumnModel_.sort, String.valueOf(i));
                     break;
                 }
             }

@@ -48,6 +48,7 @@ import com.primefaces.ext.base.util.ObjectUtil;
 import com.primefaces.ext.base.util.VOHelper;
 import com.primefaces.ext.base.web.LazyEntityDataModel;
 import com.primefaces.ext.base.web.view.entity.BaseColumnModel;
+import com.primefaces.ext.base.web.view.entity.BaseColumnModel_;
 
 /**
  *
@@ -185,8 +186,7 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
     }
 
     /**
-     * native query
-     * (important)the native query does not refresh cache
+     * native query (important)the native query does not refresh cache
      *
      * @param sql native sql
      * @return the number of entities updated or deleted
@@ -400,11 +400,10 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
      * @param filters this paramter from primefaces datatable
      * @param sort this paramter from primefaces datatable
      * @param sortOrder this paramter from primefaces datatable
-     * @param jpql jpql muse end with where condation, eg: 
-     * 'select o from entity o where 1=1 '
+     * @param jpql jpql muse end with where condation, eg: 'select o from entity o where 1=1 '
      * @param columnModels
-     * @param jpqlParametersKeyValue jqpl condation Key,Value mapping eg:
-     * Jpql:(.... and x.name = :name) map:("name","China")
+     * @param jpqlParametersKeyValue jqpl condation Key,Value mapping eg: Jpql:(.... and x.name = :name)
+     * map:("name","China")
      * @return Entity List
      * @exception sort can not work on Boolean Type
      */
@@ -800,11 +799,15 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
      * 更 新 table
      *
      * @param id table id
-     * @param column table column
+     * @param field entitiy field
      * @param value new value
      * @return FacesMessage
      */
-    public FacesMessage update(String id, String column, String value) {
+    public FacesMessage update(String id, SingularAttribute field, String value) {
+        return update(id, field.getName(), value);
+    }
+
+    public FacesMessage update(String id, String field, String value) {
         FacesMessage outMessage = new FacesMessage("update");
         // if (null != value) {
         // / value = value.replaceAll("'", "\\\\'").replaceAll("\"", "\\\\\"");
@@ -814,8 +817,8 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
         // value + "' WHERE ID = '" + id + "'";
         // int count = excuteNativeSql(sql);
 
-        Query query = getEntityManager().createQuery("UPDATE " + getEntityClass().getSimpleName() + " o SET o." + column + " = :column WHERE o.id = :id ");
-        query.setParameter("column", value);
+        Query query = getEntityManager().createQuery("UPDATE " + getEntityClass().getSimpleName() + " o SET o." + field + " = :field WHERE o.id = :id ");
+        query.setParameter("field", value);
         query.setParameter("id", id);
 
         int count = query.executeUpdate();
@@ -1613,8 +1616,8 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
      * @return
      */
     public FacesMessage switchSort(String switchSortFromId, String switchSortFrom, String switchSortToId, String switchSortTo) {
-        FacesMessage fmFrom = update(switchSortFromId, "SORT", switchSortTo);
-        FacesMessage fmTo = update(switchSortToId, "SORT", switchSortFrom);
+        FacesMessage fmFrom = update(switchSortFromId, BaseColumnModel_.sort, switchSortTo);
+        FacesMessage fmTo = update(switchSortToId, BaseColumnModel_.sort, switchSortFrom);
         fmFrom.setSummary("交换排序");
         if (fmFrom.getSeverity().equals(FacesMessage.SEVERITY_INFO) && fmTo.getSeverity().equals(FacesMessage.SEVERITY_INFO)) {
             fmFrom.setDetail("操作成功");

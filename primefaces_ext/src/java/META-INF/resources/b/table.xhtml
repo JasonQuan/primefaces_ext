@@ -9,18 +9,18 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <!-- INTERFACE 
-    TODO:
+    TODO: autoComplete function on filter and edit
     EXPORT
     OUTSIDE COLUMN    
     
-    important tips:
+    important tips: if in jboss{
     if rquest has more than 512 parameters, must config standalone.xml or domain.xml like follow:
     ...alter </extensions>
     <system-properties>
         <property name="org.apache.tomcat.util.http.Parameters.MAX_COUNT" value="5000"/>
     </system-properties>
     see https://developer.jboss.org/thread/177942?start=0
-    
+    }
     bug:
     component:<p:datatable>
     error on: <rows="#{ cc.attrs.rows}>
@@ -313,7 +313,7 @@
                                         </p:selectCheckboxMenu>
 
                                     </c:if>
-                                    <c:if test="#{!column.isMultiFilter}">
+                                    <c:if test="#{!column.isMultiFilter}">                                       
                                         <p:selectOneMenu id="filter" filter="true" filterMatchMode="contains" onchange="PF('entity_tableTable').filter()">
                                             <f:selectItem itemValue="" itemLabel="select" noSelectionOption="true"/>
                                             <f:selectItems value="#{cc.attrs.controller[column.filterOptions]}"/>

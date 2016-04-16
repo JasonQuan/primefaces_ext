@@ -22,7 +22,10 @@
 
         <b:table id="baseTable" controller="#{baseColumnModelMB}" sort="true"
                  globalFilter="false" cellEdit="true" draggableColumns="true"
-                 filter="true" exportALl="true" exportPage="true" exportSelect="true" advanceColumnToggler="true"
+                 filter="true" 
+                 exportALl="true" 
+                 exportPage="true"
+                 exportSelect="true" advanceColumnToggler="true"
                  selected="entitys" deleteRow="true" removeSelect="true" addOne="true"
                  freezeColumns="false" uiDatatableTable="width:auto;"
                  resizableColumns="false" />
@@ -88,6 +91,7 @@
                                 <p:autoComplete id="create_extFunction" required="true"
                                                 placeholder="actionListener name" dropdown="true"
                                                 value="#{baseColumnModelMB.extBaseColumnModel.extFunction}"
+                                                autoHighlight="400"
                                                 completeMethod="#{baseColumnModelMB.autocompleteExtListener}" />
 
                                 <p:outputLabel for="create_extRendered" value="Rendered" />
@@ -724,6 +728,7 @@
                                 <p:outputLabel for="modify_extFunction" value="ActionListener" />
                                 <p:autoComplete id="modify_extFunction" required="true"
                                                 placeholder="actionListener name" dropdown="true"
+                                                autoHighlight="400"
                                                 value="#{baseColumnModelMB.extBaseColumnModel.extFunction}"
                                                 completeMethod="#{baseColumnModelMB.autocompleteExtListener}" />
 

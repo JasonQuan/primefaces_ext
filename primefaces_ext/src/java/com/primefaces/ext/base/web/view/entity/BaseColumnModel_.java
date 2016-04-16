@@ -9,5 +9,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public class BaseColumnModel_ {
 
     public static volatile SingularAttribute<BaseColumnModel, String> header;
+    public static volatile SingularAttribute<BaseColumnModel, String> sort;
+    public static volatile SingularAttribute<BaseColumnModel, String> width;
 
 }
