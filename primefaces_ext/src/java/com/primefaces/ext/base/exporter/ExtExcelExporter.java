@@ -14,7 +14,9 @@ import javax.faces.component.ValueHolder;
 import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.convert.Converter;
 import org.primefaces.component.celleditor.CellEditor;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.export.ExcelExporter;
+import org.primefaces.util.ComponentUtils;
 
 public class ExtExcelExporter extends ExcelExporter {
 
@@ -23,7 +25,7 @@ public class ExtExcelExporter extends ExcelExporter {
         if (component instanceof UIPanel) {
             String headerValue = null;
             String header = "";
-            for (UIComponent child : component.getChildren()) {                
+            for (UIComponent child : component.getChildren()) {
                 headerValue = exportValue(context, child);
                 header = header + headerValue;
             }
@@ -116,5 +118,9 @@ public class ExtExcelExporter extends ExcelExporter {
                 return "";
             }
         }
+    }
+
+    public String getSheetName(FacesContext context, DataTable table) {
+        return ComponentUtils.getValueToRender(context, table.findComponent("exportSheetName"));
     }
 }

@@ -57,6 +57,7 @@
         <cc:attribute name="exportPage" type="java.lang.Boolean" default="false" shortDescription="TODO: data body"/>
         <cc:attribute name="exportSelect" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>
         <cc:attribute name="exportName" type="java.lang.String" default="export file" shortDescription="TODO:"/>
+        <cc:attribute name="exportSheetName" type="java.lang.String" default="sheet A" shortDescription="TODO:"/>
         <cc:attribute name="globalFilter" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>            
         <cc:attribute name="freezeColumns" type="java.lang.Boolean" default="false" shortDescription="TODO:full test"/>
         <cc:attribute name="freezeScrollbar" type="java.lang.String" default="autoHide:0" shortDescription="must json format,support"/>
@@ -163,7 +164,7 @@
                      >
 
             <f:facet name="header">
-                #{cc.attrs.headerText}
+                <h:outputText id="headerText" value="#{cc.attrs.headerText}"/>
                 <h:panelGroup style="float: left;">
                     <c:if test="#{cc.attrs.freezeColumns}">
                         <h:outputText value="Freeze Columns:" />
@@ -211,7 +212,8 @@
                     <p:inputText id="globalFilter" onkeyup="PF('entity_tableTable').filter()" style="width:150px" placeholder="Quick Search"/>
                     <p:commandButton type="button" icon="ui-icon-search" title="Click do filter"/>
                 </h:panelGroup>
-                <h:inputHidden value="newWidth" id="newWidth"/>
+                <h:inputHidden value="#{cc.attrs.exportSheetName}" id="exportSheetName"/>
+                <h:inputHidden rendered="#{cc.attrs.resizableColumns}" value="newWidth" id="newWidth"/>
             </f:facet>
             <p:ajax event="filter" onstart="setOldLeft();" oncomplete="doFilter();"/>
             <p:ajax event="sort" onstart="setOldLeft();" oncomplete="freezeColumns();"/>
