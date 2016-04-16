@@ -6,6 +6,14 @@
                 xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+            .new_column_dialog div:nth-child(2){
+                padding: 0;
+            }
+            .new_column_dialog div:nth-child(2) div:nth-child(2){
+                padding: 0;
+            }
+        </style>
     </h:head>
     <p:growl id="growl" showDetail="true" showSummary="true" />
     <h:form id="form" prependId="false">
@@ -34,7 +42,7 @@
             <p:graphicImage library="img" name="ajaxloadingbar.gif" />
         </p:blockUI>
         <p:dialog widgetVar="create_new_column" modal="false"
-                  header="Create Ext Columns" resizable="false">
+                  header="Create Ext Columns" styleClass="new_column_dialog" resizable="false">
             <p:ajax event="close" process="@this"
                     listener="#{baseColumnModelMB.reset()}" />
             <p:outputPanel id="outputPanel_create_column">
@@ -91,7 +99,7 @@
                                 <p:autoComplete id="create_extFunction" required="true"
                                                 placeholder="actionListener name" dropdown="true"
                                                 value="#{baseColumnModelMB.extBaseColumnModel.extFunction}"
-                                                autoHighlight="400"
+                                                scrollHeight="400"                                                
                                                 completeMethod="#{baseColumnModelMB.autocompleteExtListener}" />
 
                                 <p:outputLabel for="create_extRendered" value="Rendered" />
@@ -416,9 +424,10 @@
                                              placeholder="html title"
                                              value="#{baseColumnModelMB.extBaseColumnModel.title}" />
 
-                                <p:outputLabel for="add_column_create_sort" value="Sort" />
-                                <p:inputText id="add_column_create_sort" placeholder="sort"
-                                             value="#{baseColumnModelMB.extBaseColumnModel.sort}" />
+                                <p:outputLabel for="add_column_create_converterId" value="Converter Id" />
+                                <p:inputText id="add_column_create_converterId"
+                                             placeholder="converterId"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.converterId}" />
 
                                 <p:outputLabel for="add_column_create_outFormat"
                                                value="Out Format" />
@@ -426,17 +435,22 @@
                                              placeholder="support Date and Digital Type"
                                              value="#{baseColumnModelMB.extBaseColumnModel.outFormat}" />
 
-                                <p:outputLabel for="add_column_create_filterPlaceHolder"
-                                               value="Filter PlaceHolder" />
-                                <p:inputText id="add_column_create_filterPlaceHolder"
-                                             placeholder="Filter PlaceHolder"
-                                             value="#{baseColumnModelMB.extBaseColumnModel.filterPlaceHolder}" />
+                                <p:outputLabel for="add_column_create_sort" value="Sort" />
+                                <p:inputText id="add_column_create_sort" placeholder="sort"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.sort}" />
 
                             </p:panelGrid>
                             <p:panelGrid columns="2">
                                 <f:facet name="header">
                                     <h:outputText value="EXT Options" />
                                 </f:facet>
+                                
+
+                                <p:outputLabel for="add_column_create_filterPlaceHolder"
+                                               value="Filter PlaceHolder" />
+                                <p:inputText id="add_column_create_filterPlaceHolder"
+                                             placeholder="Filter PlaceHolder"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.filterPlaceHolder}" />                                
                                 <p:outputLabel for="add_column_create_visible" value="Visible" />
                                 <p:selectOneRadio id="add_column_create_visible"
                                                   value="#{baseColumnModelMB.extBaseColumnModel.visible}">
@@ -485,7 +499,7 @@
                                 </p:selectOneRadio>
 
                                 <p:outputLabel for="add_column_create_resizable"
-                                               value="Column Export" />
+                                               value="Column Resizable" />
                                 <p:selectOneRadio id="add_column_create_resizable"
                                                   value="#{baseColumnModelMB.extBaseColumnModel.resizable}">
                                     <f:selectItem itemValue="true" itemLabel="Yes" />
@@ -728,7 +742,7 @@
                                 <p:outputLabel for="modify_extFunction" value="ActionListener" />
                                 <p:autoComplete id="modify_extFunction" required="true"
                                                 placeholder="actionListener name" dropdown="true"
-                                                autoHighlight="400"
+                                                scrollHeight="400"
                                                 value="#{baseColumnModelMB.extBaseColumnModel.extFunction}"
                                                 completeMethod="#{baseColumnModelMB.autocompleteExtListener}" />
 

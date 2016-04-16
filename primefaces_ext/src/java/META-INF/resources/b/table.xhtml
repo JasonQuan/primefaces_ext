@@ -345,7 +345,8 @@
                         <c:if test="#{!cc.attrs.cellEdit}">
                             <h:outputText style="#{column.style}" value="#{entity[column.field]}">
                                 <c:if test="#{column.hasConverterId()}">	                    
-                                    <f:converter parent="#{column.outFormat}" converterId="#{column.converterId}"/>
+                                    <f:converter converterId="#{column.converterId}"/>
+                                    <!--TODO: outFormat  parent=" # {column.outFormat}" -->
                                 </c:if>
                             </h:outputText>
                         </c:if>
