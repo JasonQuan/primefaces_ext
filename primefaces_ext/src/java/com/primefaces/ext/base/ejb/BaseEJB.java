@@ -803,11 +803,11 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
      * @param value new value
      * @return FacesMessage
      */
-    public FacesMessage update(String id, SingularAttribute field, String value) {
+    public FacesMessage update(String id, SingularAttribute field, Object value) {
         return update(id, field.getName(), value);
     }
 
-    public FacesMessage update(String id, String field, String value) {
+    public FacesMessage update(String id, String field, Object value) {
         FacesMessage outMessage = new FacesMessage("update");
         // if (null != value) {
         // / value = value.replaceAll("'", "\\\\'").replaceAll("\"", "\\\\\"");

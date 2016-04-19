@@ -595,8 +595,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
     }
 
     /**
-     * bug on pf5.2: PF().filter() not working under the p:columns,so, just inputText can working on column
-     * filter for now.
+     * bug on pf5.2: PF().filter() not working under the p:columns,so, just inputText can working on column filter for now.
      */
     private List<BaseColumnModel> columns = new ArrayList<>();
 
@@ -1090,4 +1089,8 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
 
     }
 
+    public void removeColumn(String entityId) {
+        dao().update(entityId, BaseColumnModel_.visible, Boolean.FALSE);
+        //TODO: update current columns
+    }
 }

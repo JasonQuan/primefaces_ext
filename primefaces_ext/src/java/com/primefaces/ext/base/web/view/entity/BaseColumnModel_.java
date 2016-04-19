@@ -11,5 +11,7 @@ public class BaseColumnModel_ {
     public static volatile SingularAttribute<BaseColumnModel, String> header;
     public static volatile SingularAttribute<BaseColumnModel, String> sort;
     public static volatile SingularAttribute<BaseColumnModel, String> width;
+    public static volatile SingularAttribute<BaseColumnModel, String> field;
+    public static volatile SingularAttribute<BaseColumnModel, Boolean> visible;
 
 }
