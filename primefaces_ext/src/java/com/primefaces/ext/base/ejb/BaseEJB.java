@@ -249,18 +249,7 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
 
         return outcome;
     }
-
-    /**
-     *
-     * @param filter eg: id > 1 and o.name = 'jason'
-     * @param columns
-     * @param jpqlCondation
-     * @return LazyEntityDataModel primefaces datatable
-     */
-    protected LazyEntityDataModel<T, E> getLazyEntityDataModel(String filter, List<BaseColumnModel> columns, Map<String, Object> jpqlCondation) {
-        return new LazyEntityDataModel<>(filter, this, columns, jpqlCondation);
-    }
-
+ 
     /**
      * id type only: Integer,String,Long
      *

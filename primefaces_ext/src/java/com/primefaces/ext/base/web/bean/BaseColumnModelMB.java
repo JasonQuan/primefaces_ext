@@ -70,6 +70,11 @@ public class BaseColumnModelMB extends BaseMB<BaseColumnModel, BaseColumnModel> 
         super.reset();
     }
 
+    @Override
+    protected String getGlobalFilterJpql() {
+        return " and (o.entity like '%{text}%' or o.field like '%{text}%') and 1=1 ";
+    }
+
     public void resetManagedBeanFields() {
         managedBeanFields = null;
     }

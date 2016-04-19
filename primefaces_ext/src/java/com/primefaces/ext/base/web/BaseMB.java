@@ -89,7 +89,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
      * 实 体 数 组，用 于 datatable 多 选
      */
     private List<T> entitys;
-
+ 
     // t est
     public BaseMB() {
     }
@@ -168,10 +168,14 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
      */
     public LazyEntityDataModel<T, E> getDataModel() {
         if (dataModel == null) {
-            dataModel = new LazyEntityDataModel<T, E>(getDataModelJpql(), dao(), allColumns, getJpqlParameters());
+            dataModel = new LazyEntityDataModel<T, E>(getDataModelJpql(), dao(), allColumns, getJpqlParameters(), getGlobalFilterJpql());
         }
 
         return dataModel;
+    }
+    
+    protected String getGlobalFilterJpql(){
+        return "";
     }
 
     protected Map<String, Object> getJpqlParameters() {
@@ -523,7 +527,7 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
 
     public void batchRemoveByIds() {
         // TODO: remove validation
-       // MessageBundle.autoMessage(dao().removeBatchByIds(selectedIds));
+        // MessageBundle.autoMessage(dao().removeBatchByIds(selectedIds));
         MessageBundle.autoMessage(dao().removeBatch(entitys));
     }
 

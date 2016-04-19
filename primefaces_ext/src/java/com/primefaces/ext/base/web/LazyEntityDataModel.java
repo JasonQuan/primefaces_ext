@@ -13,6 +13,8 @@ import com.primefaces.ext.base.entity.AbstractEntity;
 import com.primefaces.ext.base.util.BaseLogger;
 import com.primefaces.ext.base.util.MessageBundle;
 import com.primefaces.ext.base.web.view.entity.BaseColumnModel;
+import javax.faces.context.FacesContext;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -23,6 +25,7 @@ public class LazyEntityDataModel<T extends AbstractEntity, E extends AbstractEnt
     private final BaseLogger logger = new BaseLogger(this.getClass());
     private static final long serialVersionUID = 1L;
     private String filter;
+    private String globalFilter;
     private final BaseEJB<T, E> baseSB;
     private Map<String, BaseColumnModel> columnModels;
     private Map<String, Object> jpqlCondation;
@@ -33,8 +36,9 @@ public class LazyEntityDataModel<T extends AbstractEntity, E extends AbstractEnt
      * @param baseDao
      * @param columnModels
      * @param conditions
+     * @param globalFilter format must like ( and o.field1 like '%{text%' or o.field2 like '%{text%' or ...) and 1=1
      */
-    public LazyEntityDataModel(String filter, BaseEJB<T, E> baseDao, List<BaseColumnModel> columnModels, Map<String, Object> conditions) {
+    public LazyEntityDataModel(String filter, BaseEJB<T, E> baseDao, List<BaseColumnModel> columnModels, Map<String, Object> conditions,String globalFilter) {
         if (filter != null && !"".equals(filter) && (filter.contains("order by") || filter.contains("ORDER BY"))) {
             logger.warn("[LazyEntityDataModel] can not contains order by");
         } else {
@@ -46,6 +50,7 @@ public class LazyEntityDataModel<T extends AbstractEntity, E extends AbstractEnt
         logger.debug("filter====>>>>" + filter);
         logger.debug("conditions====>>>>" + conditions);
         this.jpqlCondation = conditions;
+        this.globalFilter = globalFilter;
         if (columnModels != null && !columnModels.isEmpty()) {
             for (BaseColumnModel bcm : columnModels) {
                 this.columnModels.put(bcm.getTableColumn(), bcm);
@@ -87,8 +92,9 @@ public class LazyEntityDataModel<T extends AbstractEntity, E extends AbstractEnt
 
     @Override
     public List<E> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        setRowCount(baseSB.findByConditionRowCount(filters, filter, jpqlCondation));
-        return baseSB.findByCondition(first, pageSize, filters, sortField, sortOrder, filter, columnModels, jpqlCondation);
+        String perQuery = getFinalSelectQuery();
+        setRowCount(baseSB.findByConditionRowCount(filters, perQuery, jpqlCondation));
+        return baseSB.findByCondition(first, pageSize, filters, sortField, sortOrder, perQuery, columnModels, jpqlCondation);
     }
 
     @Override
@@ -105,4 +111,17 @@ public class LazyEntityDataModel<T extends AbstractEntity, E extends AbstractEnt
         return object.getId();
     }
 
+    protected String getFinalSelectQuery() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String searchText = context.getExternalContext().getRequestParameterMap().get("baseTable:entity_table:extGlobalFilter");
+        if (StringUtils.isEmpty(searchText)) {
+            searchText = filter;
+        } else if (StringUtils.isNotEmpty(globalFilter)) {
+            searchText = filter + globalFilter.replace("{text}", searchText);
+        } else {
+            logger.info("if using global filter, please call setGlobalFilter method in controller");
+        }
+        return searchText;
+    }
+ 
 }

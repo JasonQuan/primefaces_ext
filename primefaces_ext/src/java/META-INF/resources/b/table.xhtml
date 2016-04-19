@@ -209,11 +209,15 @@
                     </p:splitButton>  
                 </h:panelGroup>
                 <h:panelGroup rendered="#{cc.attrs.globalFilter}" style="float:right;">
-                    <!--TODO: globalFilter-->
-                    <p:inputText id="globalFilter" onkeyup="PF('entity_tableTable').filter()" style="width:150px" placeholder="Quick Search"/>
-                    <p:commandButton type="button" icon="ui-icon-search" title="Click do filter"/>
+                    <!--TODO: searche event-->
+                    <p:inputText id="extGlobalFilter"
+                                 style="width:150px" placeholder="Quick Search"/>
+                    <p:commandButton process="extGlobalFilter,@this"
+                                     oncomplete="PF('entity_tableTable').filter()"
+                                     update="entity_table"
+                                     icon="fa fa-search" title="Click do filter"/>
                 </h:panelGroup>
-                <h:inputHidden value="#{cc.attrs.exportSheetName}" id="exportSheetName"/>
+                <h:outputText style="display: none;" value="#{cc.attrs.exportSheetName}" id="exportSheetName"/>
                 <h:inputHidden rendered="#{cc.attrs.resizableColumns}" value="newWidth" id="newWidth"/>
             </f:facet>
             <p:ajax event="filter" onstart="setOldLeft();" oncomplete="doFilter();"/>

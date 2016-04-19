@@ -121,6 +121,10 @@ public class ExtExcelExporter extends ExcelExporter {
     }
 
     public String getSheetName(FacesContext context, DataTable table) {
-        return ComponentUtils.getValueToRender(context, table.findComponent("exportSheetName"));
+        UIComponent uic = table.findComponent("exportSheetName");
+        if (uic != null) {
+            return ComponentUtils.getValueToRender(context, table.findComponent("exportSheetName"));
+        }
+        return "sheet 0";
     }
 }
