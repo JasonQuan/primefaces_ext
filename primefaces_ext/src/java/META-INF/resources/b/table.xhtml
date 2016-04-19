@@ -49,17 +49,17 @@
         <cc:attribute name="columnToggler" type="java.lang.Boolean" default="false"/>   
         -->
 
-        <cc:attribute name="contextMenu" type="java.lang.String"/>
+        <cc:attribute name="contextMenu" type="java.lang.String" shortDescription="p:contextMenu src path"/>
         <cc:attribute name="addOne" type="java.lang.Boolean" default="false"/>
         <cc:attribute name="rowSelectRadioUpdate" type="java.lang.String" default="" shortDescription="update id,eg: @this..."/>    
 
         <cc:attribute name="advanceColumnToggler" type="java.lang.Boolean" default="false" shortDescription=""/>    
         <cc:attribute name="removeSelect" type="java.lang.Boolean" default="false" shortDescription="TODO: confirm delete"/>
-        <cc:attribute name="exportALl" type="java.lang.Boolean" default="false" shortDescription="TODO: data body"/>
-        <cc:attribute name="exportPage" type="java.lang.Boolean" default="false" shortDescription="TODO: data body"/>
-        <cc:attribute name="exportSelect" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>
-        <cc:attribute name="exportName" type="java.lang.String" default="export file" shortDescription="TODO:"/>
-        <cc:attribute name="exportSheetName" type="java.lang.String" default="sheet A" shortDescription="TODO:"/>
+        <cc:attribute name="exportALl" type="java.lang.Boolean" default="false" shortDescription="export excel"/>
+        <cc:attribute name="exportPage" type="java.lang.Boolean" default="false" shortDescription="export excel"/>
+        <cc:attribute name="exportSelect" type="java.lang.Boolean" default="false" shortDescription="export excel"/>
+        <cc:attribute name="exportName" type="java.lang.String" default="export file" shortDescription="export excel name"/>
+        <cc:attribute name="exportSheetName" type="java.lang.String" default="sheet A" shortDescription="export excel sheet name"/>
         <cc:attribute name="globalFilter" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>            
         <cc:attribute name="freezeColumns" type="java.lang.Boolean" default="false" shortDescription="TODO:full test"/>
         <cc:attribute name="freezeScrollbar" type="java.lang.String" default="autoHide:0" shortDescription="must json format,support"/>
@@ -115,14 +115,6 @@
                 } 
             </style>
         </c:if>
-        <!-- context menu not working now 
-        <p:contextMenu for="entity_table">
-            <p:menuitem value="reset columns"
-                        actionListener="# {cc.attrs.controller.resetColumns}"
-                        process="entity_table,@this" update="entity_table,:growl">
-            </p:menuitem>
-        </p:contextMenu>
-        -->
         <!-- 
            <h:panelGroup rendered="# {cc.attrs.columnToggler}">
                <p:selectCheckboxMenu id="menu"
