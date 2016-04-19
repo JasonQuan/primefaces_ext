@@ -61,7 +61,7 @@
         <cc:attribute name="exportName" type="java.lang.String" default="export file" shortDescription="export excel name"/>
         <cc:attribute name="exportSheetName" type="java.lang.String" default="sheet A" shortDescription="export excel sheet name"/>
         <cc:attribute name="globalFilter" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>            
-        <cc:attribute name="freezeColumns" type="java.lang.Boolean" default="false" shortDescription="TODO:full test"/>
+        <cc:attribute name="freezeColumns" type="java.lang.Integer" default="5" shortDescription="TODO:full test"/>
         <cc:attribute name="freezeScrollbar" type="java.lang.String" default="autoHide:0" shortDescription="must json format,support"/>
 
         <cc:attribute name="emptyMessage" default="empty records"/>    
@@ -74,9 +74,6 @@
     <!-- IMPLEMENTATION -->
 
     <cc:implementation>
-        <script>
-
-        </script>    
         <h:outputStylesheet library="css" name="ext_table.css" />
         <style>
             .ui-column-filter{
@@ -93,7 +90,7 @@
             }
 
         </style>
-        <c:if test="#{cc.attrs.freezeColumns}">
+        <c:if test="#{cc.attrs.freezeColumns > 0}">
             <style>
                 .hidden {
                     display: none !important;
@@ -163,14 +160,12 @@
             <f:facet name="header">
                 <h:outputText id="headerText" value="#{cc.attrs.headerText}"/>
                 <h:panelGroup style="float: left;">
-                    <c:if test="#{cc.attrs.freezeColumns}">
+                    <c:if test="#{cc.attrs.freezeColumns > 0}">
                         <h:outputText value="Freeze Columns:" />
                         <h:selectOneMenu value="#{cc.attrs.controller.freezeColumns}" id='baseDynamicColumnsFreezeSize'>
-                            <f:selectItem itemValue="0" itemLabel="0"/>
-                            <f:selectItem itemValue="1" itemLabel="1"/>
-                            <f:selectItem itemValue="2" itemLabel="2"/>
-                            <f:selectItem itemValue="3" itemLabel="3"/>
-                            <f:selectItem itemValue="4" itemLabel="4"/>
+                            <c:forEach end="#{cc.attrs.freezeColumns}" var="size">                                
+                                <f:selectItem itemValue="#{size}" itemLabel="#{size}"/>
+                            </c:forEach>
                         </h:selectOneMenu>
                     </c:if> 
                     <p:splitButton value="Options">
@@ -210,8 +205,9 @@
                 </h:panelGroup>
                 <h:panelGroup rendered="#{cc.attrs.globalFilter}" style="float:right;">
                     <!--TODO: searche event-->
-                    <p:inputText id="extGlobalFilter"
-                                 style="width:150px" placeholder="Quick Search"/>
+                    <p:inputText id="extGlobalFilter" onkeypress="if (event.keyCode == 13){PF('entity_tableTable').filter();}"
+                        style="width:150px" placeholder="Quick Search">
+                    </p:inputText>
                     <p:commandButton process="extGlobalFilter,@this"
                                      oncomplete="PF('entity_tableTable').filter()"
                                      update="entity_table"
@@ -520,16 +516,16 @@
             </f:facet>
         </p:dialog>
 
-        <h:outputScript rendered="#{cc.attrs.freezeColumns}" library="js" name="tablefreeze.js"/>
+        <h:outputScript rendered="#{cc.attrs.freezeColumns > 0}" library="js" name="tablefreeze.js"/>
 
-        <c:if test="#{!cc.attrs.freezeColumns}">
+        <c:if test="#{cc.attrs.freezeColumns == 0}">
             <script >
                 function setOldLeft() {}
                 function doFilter() {}
                 function freezeColumns() {}
             </script>
         </c:if>
-        <c:if test="#{cc.attrs.freezeColumns}">
+        <c:if test="#{cc.attrs.freezeColumns > 0}">
             <span style="display: none;" id="freezeScrollbar" title="#{cc.attrs.freezeScrollbar}"/>
             <span style="display: none;" id="tempFreezeScrollbarLeft" title="#{cc.attrs.freezeScrollbar}"/>
             <script>
