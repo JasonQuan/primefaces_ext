@@ -179,30 +179,34 @@
                     </c:if> 
                     <p:splitButton value="Options">
                         <p:menuitem rendered="#{cc.attrs.addOne}" value="Add One" 
+                                    icon="fa fa-fw fa-plus"
                                     actionListener="#{cc.attrs.controller.newEmptyEntity()}"
                                     process="@this" update="entity_table,:growl"/>
-                        <p:menuitem value="Select Columns" rendered="#{cc.attrs.advanceColumnToggler}" process="@this" onclick="PF('selectColumns').show()"/>
+                        <p:menuitem value="Select Columns"
+                                    icon="fa fa-fw fa-th-list"                                    
+                                    rendered="#{cc.attrs.advanceColumnToggler}" process="@this" onclick="PF('selectColumns').show()"/>
 
                         <p:menuitem value="Restore Columns Setting"
                                     rendered="#{cc.attrs.resetColumnsAble}"
                                     actionListener="#{cc.attrs.controller.resetColumns}"
                                     process="entity_table,@this" update="entity_table,:growl"/>
                         <p:menuitem value="Remove Select" rendered="#{cc.attrs.removeSelect}"
+                                    icon="fa fa-fw fa-remove"
                                     actionListener="#{cc.attrs.controller.batchRemoveByIds}"
                                     process="@this" update="entity_table,:growl"/>
                         <p:menuitem value="Export All" rendered="#{cc.attrs.exportALl}"                                    
-                                    icon="ui-icon-arrowthick-1-s"
+                                    icon="fa fa-fw fa-download"
                                     ajax="false" immediate="true">
                             <pe:exporter target="entity_table" type="xlsx" fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                             <p:fileDownload value="#{cc.attrs.controller.excel}"/>
                         </p:menuitem>
                         <p:menuitem value="Export Page" rendered="#{cc.attrs.exportPage}"
-                                    icon="ui-icon-arrowthick-1-s"
+                                    icon="fa fa-fw fa-download"
                                     ajax="false" immediate="true">
                             <pe:exporter target="entity_table" type="xlsx" pageOnly="#{cc.attrs.exportPage}" fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                         </p:menuitem>
                         <p:menuitem value="Export Selection" rendered="#{cc.attrs.exportSelect}"
-                                    icon="ui-icon-arrowthick-1-s"
+                                    icon="fa fa-fw fa-download"
                                     ajax="false" immediate="true">
                             <pe:exporter target="entity_table" type="xlsx" selectionOnly="#{cc.attrs.exportSelect}"  fileName="#{cc.attrs.exportName}" postProcessor="#{cc.attrs.controller.postExportExcel}"/>
                         </p:menuitem>
@@ -342,7 +346,7 @@
                             </f:facet>
                         </c:if>                
                         <f:facet name="header">
-                            <p:commandLink style="float:left;" class="fa fa-times" 
+                            <p:commandLink style="float:left;" class="fa fa-fw fa-remove" 
                                            rendered="#{cc.attrs.removeOnColumn}"
                                            title="remove this column"
                                            disabled="#{!column.toggleable}"
