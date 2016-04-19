@@ -523,7 +523,8 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
 
     public void batchRemoveByIds() {
         // TODO: remove validation
-        MessageBundle.autoMessage(dao().removeBatchByIds(selectedIds));
+       // MessageBundle.autoMessage(dao().removeBatchByIds(selectedIds));
+        MessageBundle.autoMessage(dao().removeBatch(entitys));
     }
 
     public void afterCellEdit() {

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:menuitem value="Remove Select" rendered="#{cc.attrs.removeSelect}"
+                icon="fa fa-fw fa-remove"
+                actionListener="#{cc.attrs.controller.batchRemoveByIds}"
+                process="@this" update="entity_table,:growl"/>
+</ui:composition>

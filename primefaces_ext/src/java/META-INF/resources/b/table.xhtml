@@ -49,6 +49,7 @@
         <cc:attribute name="columnToggler" type="java.lang.Boolean" default="false"/>   
         -->
 
+        <cc:attribute name="contextMenu" type="java.lang.String"/>
         <cc:attribute name="addOne" type="java.lang.Boolean" default="false"/>
         <cc:attribute name="rowSelectRadioUpdate" type="java.lang.String" default="" shortDescription="update id,eg: @this..."/>    
 
@@ -137,6 +138,9 @@
            </h:panelGroup>
         -->
 
+        <p:contextMenu for="entity_table" rendered="#{cc.attrs.contextMenu != ''}">
+            <ui:include src="#{cc.attrs.contextMenu}"/>
+        </p:contextMenu>
         <p:dataTable id="entity_table"
                      var="entity"
                      value="#{cc.attrs.controller.dataModel}" 
@@ -234,6 +238,8 @@
 
             <!-- TODO: add javascript support for rowSelectCheckbox ,rowUnselectCheckbox,rowSelectRadio-->
 
+            <p:ajax rendered="#{cc.attrs.selected eq 'entitys'}" event="rowSelect" listener="#{cc.attrs.controller.onRowSelect}" update=":growl" />
+            <p:ajax rendered="#{cc.attrs.selected eq 'entitys'}" event="rowUnselect" listener="#{cc.attrs.controller.onRowUnselect}" update=":growl" />
             <p:ajax rendered="#{cc.attrs.selected eq 'entitys'}" event="rowSelectCheckbox" listener="#{cc.attrs.controller.onRowSelect}" update=":growl" />
             <p:ajax rendered="#{cc.attrs.selected eq 'entitys'}" event="rowUnselectCheckbox" listener="#{cc.attrs.controller.onRowUnselect}" update=":growl" />
             <!-- TODO: add rowSelectRadio listener ad baseMB -->
