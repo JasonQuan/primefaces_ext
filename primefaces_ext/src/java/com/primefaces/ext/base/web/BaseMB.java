@@ -1094,8 +1094,8 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
 
     }
 
-    public void removeColumn(String entityId) {
-        dao().update(entityId, BaseColumnModel_.visible, Boolean.FALSE);
-        //TODO: update current columns
+    public void removeColumn(String entityId) {        
+        columnModelDao.update(entityId, BaseColumnModel_.visible, Boolean.FALSE);
+        initViewColums();
     }
 }

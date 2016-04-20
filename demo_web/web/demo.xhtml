@@ -1,19 +1,78 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://xmlns.jcp.org/jsf/composite/b"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Dynamic Data Table showcase</title>
     </h:head>
     <h:body>
         <p:growl id="growl" />
-        <h:form id="customerQuery" prependId="false">
+        <h:form prependId="false">
+            <p:panelGrid columns="8">
+                <p:outputLabel for="addOne" value="can add record"/>
+                <p:selectBooleanCheckbox id="addOne" value="#{sudentsMB.addOne}"/>
+                <p:outputLabel for="deleteRow" value="Delete Row"/>
+                <p:selectBooleanCheckbox id="deleteRow" value="#{sudentsMB.deleteRow}"/>
+                <p:outputLabel for="removeOnColumn" value="Remove Column on Header"/>
+                <p:selectBooleanCheckbox id="removeOnColumn" value="#{sudentsMB.removeOnColumn}"/>
+                <p:outputLabel for="exportName" value="Export File Name"/>
+                <p:inputText id="exportName" value="#{sudentsMB.exportName}"/>
+                <p:outputLabel for="draggableColumns" value="Draggable Columns"/>
+                <p:selectBooleanCheckbox id="draggableColumns" value="#{sudentsMB.draggableColumns}"/>
+                <p:outputLabel for="sort" value="Sort"/>
+                <p:selectBooleanCheckbox id="sort" value="#{sudentsMB.sort}"/>
+                <p:outputLabel for="filter" value="Filter"/>
+                <p:selectBooleanCheckbox id="filter" value="#{sudentsMB.filter}"/>
+                <p:outputLabel for="exportSheetName" value="Export Sheet Name"/>
+                <p:inputText id="exportSheetName" value="#{sudentsMB.exportSheetName}"/>
+                <p:outputLabel for="globalFilter" value="Global Filter"/>
+                <p:selectBooleanCheckbox id="globalFilter" value="#{sudentsMB.globalFilter}"/>
+                <p:outputLabel for="cellEdit" value="Cell Edit"/>
+                <p:selectBooleanCheckbox id="cellEdit" value="#{sudentsMB.cellEdit}"/>
+                <p:outputLabel for="showIndex" value="Show Index"/>
+                <p:selectBooleanCheckbox id="showIndex" value="#{sudentsMB.showIndex}"/>
+                <p:outputLabel for="freezeColumnsSize" value="freezeColumnsSize"/>
+                <p:spinner id="freezeColumnsSize" value="#{sudentsMB.freezeColumnsSize}"/>
+                <p:outputLabel for="resizableColumns" value="Resizable Columns"/>
+                <p:selectBooleanCheckbox id="resizableColumns" value="#{sudentsMB.resizableColumns}"/>
+                <p:outputLabel for="advanceColumnToggler" value="Column Toggler"/>
+                <p:selectBooleanCheckbox id="advanceColumnToggler" value="#{sudentsMB.advanceColumnToggler}"/>
+                <p:outputLabel for="removeSelect" value="Remove Select"/>
+                <p:selectBooleanCheckbox id="removeSelect" value="#{sudentsMB.removeSelect}"/>
+                <p:outputLabel for="uiDatatableTable" value="uiDatatableTable"/>
+                <p:inputText id="uiDatatableTable" value="#{sudentsMB.uiDatatableTable}" placeholder="try width:auto;"/>
+                <p:outputLabel for="exportALl" value="export ALl"/>
+                <p:selectBooleanCheckbox id="exportALl" value="#{sudentsMB.exportALl}"/>
+                <p:outputLabel for="exportPage" value="export Page"/>
+                <p:selectBooleanCheckbox id="exportPage" value="#{sudentsMB.exportPage}"/>
+                <p:outputLabel for="exportSelect" value="export Select"/>
+                <p:selectBooleanCheckbox id="exportSelect" value="#{sudentsMB.exportSelect}"/>
+                <p:commandButton value="update table" ajax="false" actionListener="#{sudentsMB.initTable()}"/>
+            </p:panelGrid>
             <b:table id="datatableExt" controller="#{sudentsMB}"
-                     advanceColumnToggler="true" uiDatatableTable="width:auto;"
-                     resizableColumns="true" resetColumnsAble="true" addOne="true"
-                     selected="entity"
+                     advanceColumnToggler="#{sudentsMB.advanceColumnToggler}"
+                     uiDatatableTable="#{sudentsMB.uiDatatableTable}"
+                     resizableColumns="#{sudentsMB.resizableColumns}"
+                     resetColumnsAble="#{sudentsMB.resetColumnsAble}"
+                     addOneRecord="#{sudentsMB.addOne}"
+                     exportSelect="#{sudentsMB.exportSelect}"
+                     exportPage="#{sudentsMB.exportPage}"
+                     exportALl="#{sudentsMB.exportALl}"
+                     cellEdit="#{sudentsMB.cellEdit}"
+                     freezeColumns="#{sudentsMB.freezeColumnsSize}"
+                     removeSelect="#{sudentsMB.removeSelect}"
+                     globalFilter="#{sudentsMB.globalFilter}" 
+                     filter="#{sudentsMB.filter}"  
+                     removeOnColumn="#{sudentsMB.removeOnColumn}"
+                     showIndex="#{sudentsMB.showIndex}"
+                     deleteRow="#{sudentsMB.deleteRow}"
+                     draggableColumns="#{sudentsMB.draggableColumns}"
+                     exportSheetName="#{sudentsMB.exportSheetName}" 
+                     exportName="#{sudentsMB.exportName}"                    
+                     selected="entitys"
                      headerText="demo">
             </b:table>
         </h:form>

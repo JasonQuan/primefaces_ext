@@ -29,13 +29,13 @@
                          update=":growl,@form" />
 
         <b:table id="baseTable" controller="#{baseColumnModelMB}" sort="true"
-                 globalFilter="false" cellEdit="true" draggableColumns="true"
+                 globalFilter="true" cellEdit="true" draggableColumns="true"
                  filter="true" 
                  exportALl="true" 
                  exportPage="true"
                  exportSelect="true" advanceColumnToggler="true"
-                 selected="entitys" deleteRow="true" removeSelect="true" addOne="true"
-                 freezeColumns="false" uiDatatableTable="width:auto;"
+                 selected="entitys" deleteRow="true" removeSelect="true" addOneRecord="true"
+                 freezeColumns="0" uiDatatableTable="width:auto;"
                  resizableColumns="false" />
         <p:blockUI block="form" trigger="init_columns">
             PROCESSING ...<br />

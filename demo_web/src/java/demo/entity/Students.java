@@ -13,54 +13,58 @@ import com.primefaces.ext.base.entity.AbstractEntity;
 @Table(name = "STUDENTS")
 @Entity
 public class Students extends AbstractEntity implements Serializable {
-	
-	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@Column(name = "ID", nullable = false, length = 32)
-	private String id;
-	private String name;
-	private String sex;
-	private int age;
-	private int classs;
 
-	public String getId() {
-		return id;
-	}
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @Column(name = "ID", nullable = false, length = 32)
+    private String id;
+    @Column(name = "NAME")
+    private String name;
+    @Column(name = "SEX")
+    private String sex;
+    @Column(name = "AGE")
+    private int age;
+    @Column(name = "CLASSS")
+    private int classs;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getSex() {
-		return sex;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
+    public String getSex() {
+        return sex;
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public int getClasss() {
-		return classs;
-	}
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	public void setClasss(int classs) {
-		this.classs = classs;
-	}
+    public int getClasss() {
+        return classs;
+    }
+
+    public void setClasss(int classs) {
+        this.classs = classs;
+    }
 
 }

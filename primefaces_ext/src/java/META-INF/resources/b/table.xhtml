@@ -50,7 +50,7 @@
         -->
 
         <cc:attribute name="contextMenu" type="java.lang.String" shortDescription="p:contextMenu src path"/>
-        <cc:attribute name="addOne" type="java.lang.Boolean" default="false"/>
+        <cc:attribute name="addOneRecord" type="java.lang.Boolean" default="false"/>
         <cc:attribute name="rowSelectRadioUpdate" type="java.lang.String" default="" shortDescription="update id,eg: @this..."/>    
 
         <cc:attribute name="advanceColumnToggler" type="java.lang.Boolean" default="false" shortDescription=""/>    
@@ -61,7 +61,7 @@
         <cc:attribute name="exportName" type="java.lang.String" default="export file" shortDescription="export excel name"/>
         <cc:attribute name="exportSheetName" type="java.lang.String" default="sheet A" shortDescription="export excel sheet name"/>
         <cc:attribute name="globalFilter" type="java.lang.Boolean" default="false" shortDescription="TODO:"/>            
-        <cc:attribute name="freezeColumns" type="java.lang.Integer" default="5" shortDescription="TODO:full test"/>
+        <cc:attribute name="freezeColumns" type="java.lang.Integer" default="0" shortDescription="TODO:full test"/>
         <cc:attribute name="freezeScrollbar" type="java.lang.String" default="autoHide:0" shortDescription="must json format,support"/>
 
         <cc:attribute name="emptyMessage" default="empty records"/>    
@@ -169,7 +169,7 @@
                         </h:selectOneMenu>
                     </c:if> 
                     <p:splitButton value="Options">
-                        <p:menuitem rendered="#{cc.attrs.addOne}" value="Add One" 
+                        <p:menuitem rendered="#{cc.attrs.addOneRecord}" value="Add One Record" 
                                     icon="fa fa-fw fa-plus"
                                     actionListener="#{cc.attrs.controller.newEmptyEntity()}"
                                     process="@this" update="entity_table,:growl"/>
@@ -349,6 +349,7 @@
                                            title="remove this column"
                                            disabled="#{!column.toggleable}"
                                            actionListener="#{cc.attrs.controller.removeColumn(column.id)}" 
+                                           update="entity_table"                                           
                                            oncomplete="removeColumn('#{column.id}')" process="@this">
                             </p:commandLink>
                             <h:outputText id="column_sort" value="#{column.header}" class="column_sort_#{column.id}"/>
@@ -517,6 +518,7 @@
         </p:dialog>
 
         <h:outputScript rendered="#{cc.attrs.freezeColumns > 0}" library="js" name="tablefreeze.js"/>
+        <h:outputScript library="js" name="ext_table.js"/>
 
         <c:if test="#{cc.attrs.freezeColumns == 0}">
             <script >
@@ -562,45 +564,5 @@
                 }
             </script>
         </c:if>
-        <script>
-
-            function resize() {
-                return;
-                var $dataBody = $('div.ui-datatable-tablewrapper');
-                var dbHeight = $dataBody.css('height');
-                $dataBody.css({
-                    overflow: 'hidden',
-                    height: dbHeight
-                });
-            }
-
-            function bulidNewSort() {
-                var newValue = "";
-                $('span[class^="column_sort_"]').each(function (index) {
-                    var eId = $(this).attr('class').replace('column_sort_', '');
-                    if (newValue.indexOf(eId) === -1) {
-                        newValue += "," + eId + "-" + index;
-                    }
-                });
-                newValue = newValue.replace(",", "");
-                // console.log(newValue);
-                $('input[name$="_columnOrder"]').val(newValue);
-            }
-            function bulidNewWidth() {
-                var newWidth = '';
-                $('th.ba-column').each(
-                        function () {
-                            var thWith = $(this).css('width').replace("px", '');
-                            newWidth += ","
-                                    + $(this).attr('class').split('columnId-')[1]
-                                    .split(' ')[0] + '-' + thWith;
-                        });
-                newWidth = newWidth.replace(",", "");
-                $('input[name$="entity_table:newWidth"]').val(newWidth);
-            }
-            function removeColumn(columnId){
-                $('.columnId-'+columnId).hide();
-            }
-        </script>
     </cc:implementation>
 </html>

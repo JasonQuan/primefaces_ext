@@ -7,7 +7,7 @@ import com.primefaces.ext.base.ejb.PrimefacesExtEntityManagerProvider;
 
 /**
  *
- * @author 041863
+ * @author Jason
  */
 @Stateless
 public class PrimefacesExtSPIImpl implements PrimefacesExtEntityManagerProvider {
