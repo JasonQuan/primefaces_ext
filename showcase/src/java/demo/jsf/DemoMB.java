@@ -13,7 +13,7 @@ import javax.faces.bean.SessionScoped;
 
 @ManagedBean
 @SessionScoped
-public class SudentsMB extends BaseMB<Students, Students> {
+public class DemoMB extends BaseMB<Students, Students> {
 
     private String headerText;
     private boolean deleteRow;
