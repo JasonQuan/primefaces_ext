@@ -575,7 +575,8 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
             // TODO nulls as last
             // String sql = "SELECT o FROM " + entityClass.getSimpleName() +
             // " o order by o.createTime desc";
-            String sql = "SELECT o FROM " + entityClass.getSimpleName() + " o order by o.sort desc";
+//            String sql = "SELECT o FROM " + entityClass.getSimpleName() + " o order by o.sort desc";
+            String sql = "SELECT o FROM " + entityClass.getSimpleName() + " o ";
             TypedQuery<T> q = createQuery(sql, entityClass);
 
             return q.getResultList();
