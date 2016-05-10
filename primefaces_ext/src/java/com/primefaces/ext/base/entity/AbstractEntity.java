@@ -1,6 +1,7 @@
 package com.primefaces.ext.base.entity;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Date;
 
@@ -124,10 +125,14 @@ public abstract class AbstractEntity implements Cloneable, BaseEntity, Serializa
 			try {
 				field.setAccessible(true);
 				sb.append(field.getName()).append(": ");
-				if (field.getType().equals("")) {
+				if (field.getType().getName().equals("java.util.List")) {
 					sb.append("{is list}");
 				} else {
-					sb.append(field.get(this));
+                                        for(Annotation a:field.getAnnotations()){
+                                            if(a.annotationType().getPackage().getName().startsWith("javax.persistence")){
+                                                sb.append(field.get(this));                                        
+                                            }
+                                        }
 				}
 				sb.append("\n");
 			} catch (Exception e) {
