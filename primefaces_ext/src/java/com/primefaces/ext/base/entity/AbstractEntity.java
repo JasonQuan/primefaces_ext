@@ -123,19 +123,21 @@ public abstract class AbstractEntity implements Cloneable, BaseEntity, Serializa
 		StringBuffer sb = new StringBuffer(this.getClass().getName()).append("\n[");
 		for (Field field : fields) {
 			try {
-                                for(Annotation a:field.getAnnotations()){
-                                    if(!a.annotationType().getPackage().getName().startsWith("javax.persistence")){
-                                        break;
+                                if(field.getAnnotations().length > 0){
+                                    for(Annotation annotation : field.getAnnotations()){
+                                        if(!annotation.annotationType().getPackage().getName().startsWith("javax.persistence")){
+                                            break;
+                                        }
                                     }
+                                    field.setAccessible(true);
+                                    sb.append(field.getName()).append(": ");
+                                    if (field.getType().getName().equals("java.util.List")) {
+                                            sb.append("{is list}");
+                                    } else {
+                                            sb.append(field.get(this));                                        
+                                    }
+                                    sb.append("\n");
                                 }
-				field.setAccessible(true);
-				sb.append(field.getName()).append(": ");
-				if (field.getType().getName().equals("java.util.List")) {
-					sb.append("{is list}");
-				} else {
-                                        sb.append(field.get(this));                                        
-				}
-				sb.append("\n");
 			} catch (Exception e) {
 //				Logger logger = LoggerFactory.getLogger(this.getClass());
 //				logger.error(e.getMessage());
