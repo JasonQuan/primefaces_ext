@@ -828,7 +828,7 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
         if (outMessage != null) {
             return outMessage;
         }
-        outMessage = new FacesMessage(MessageBundle.UPDATE);
+        outMessage = new FacesMessage(MessageBundle.UPDATE);        
         String message = validationUniqueColumn(t);
         if (message != null) {
             outMessage.setSeverity(FacesMessage.SEVERITY_WARN);
@@ -1786,5 +1786,9 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
             e.printStackTrace();
         }
         return outcome;
+    }
+    
+    public void updateOtherEntity(Class<? extends AbstractEntity> t){
+        getEntityManager().merge(t);
     }
 }
