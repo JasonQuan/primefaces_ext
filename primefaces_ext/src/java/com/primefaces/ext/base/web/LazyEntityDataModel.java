@@ -120,6 +120,7 @@ public class LazyEntityDataModel<T extends AbstractEntity, E extends AbstractEnt
             searchText = filter + globalFilter.replace("{text}", searchText);
         } else {
             logger.info("if using global filter, please call setGlobalFilter method in controller");
+            searchText = filter;
         }
         return searchText;
     }
