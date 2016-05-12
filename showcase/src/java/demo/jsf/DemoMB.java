@@ -32,8 +32,8 @@ public class DemoMB extends BaseMB<Students, Students> {
     private boolean exportALl;
     private boolean exportPage;
     private boolean exportSelect;
-    private String exportName;
-    private String exportSheetName;
+    private String exportName = "export";
+    private String exportSheetName = "sheet0";
     private String uiDatatableTable;
     private boolean globalFilter;
     private int freezeColumnsSize;
