@@ -51,6 +51,8 @@
                 <p:selectBooleanCheckbox id="exportSelect" value="#{demoMB.exportSelect}"/>
                 <p:commandButton value="update table" ajax="false" actionListener="#{demoMB.initTable()}"/>
             </p:panelGrid>
+            </h:form>
+            <h:form prependId="false">                
             <b:table id="datatableExt" controller="#{demoMB}"
                      advanceColumnToggler="#{demoMB.advanceColumnToggler}"
                      uiDatatableTable="#{demoMB.uiDatatableTable}"

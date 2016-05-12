@@ -31,7 +31,6 @@ import javax.persistence.Lob;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
@@ -80,6 +79,9 @@ public class ObjectUtil {
         return retvalue;
     }
 
+    public static boolean isInt(Object o) {
+        return o.equals(int.class);
+    }
     public static boolean isInterger(Object o) {
         return o.equals(Integer.class);
     }
