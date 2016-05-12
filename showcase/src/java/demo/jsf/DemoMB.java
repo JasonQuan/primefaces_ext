@@ -48,6 +48,7 @@ public class DemoMB extends BaseMB<Students, Students> {
 
     public void initTable() {
         setDataModel(null);
+        setEntitys(null);
     }
 
     public String getHeaderText() {
