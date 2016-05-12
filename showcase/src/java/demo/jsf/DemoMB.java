@@ -2,7 +2,6 @@ package demo.jsf;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 
 import com.primefaces.ext.base.ejb.BaseEJB;
 import com.primefaces.ext.base.web.BaseMB;
@@ -49,6 +48,7 @@ public class DemoMB extends BaseMB<Students, Students> {
     public void initTable() {
         setDataModel(null);
         setEntitys(null);
+        getPageSelectEntitys().clear();
     }
 
     public String getHeaderText() {
