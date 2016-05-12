@@ -4,6 +4,7 @@ import com.primefaces.ext.base.entity.AbstractEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +17,9 @@ import org.primefaces.model.DefaultDashboardColumn;
 
 /**
  *
- * @author 041863
+ * @author Jason
  */
-@Table(name = "Dashboard_Model")
+@Table(name = "BASE_DASHBOARD_MODEL")
 @Entity
 public class BaseDashboardModel extends AbstractEntity implements DashboardModel, Serializable {
 
@@ -41,24 +42,35 @@ public class BaseDashboardModel extends AbstractEntity implements DashboardModel
     private List<DashboardColumn> columns;
     @Column(name = "details")
     private String details;
+    @Basic
+    private String customeKey;
+
+    public String getCustomeKey() {
+        return customeKey;
+    }
+
+    public void setCustomeKey(String customeKey) {
+        this.customeKey = customeKey;
+    }
 
     @Override
     public List<DashboardColumn> getColumns() {
-        String[] cols = getDetails().split("\\|");
-        columns = new ArrayList<DashboardColumn>(cols.length);
-        for (int c = 0; c < cols.length; c++) {
-            String[] items = cols[c].split(",");
-            int columnIndex = Integer.valueOf(items[0]);
-            DashboardColumn col = null;
-            if (columns.size() >= columnIndex + 1) {
-                col = columns.get(columnIndex);
+        columns = new ArrayList<DashboardColumn>();
+        if (getDetails() != null && !getDetails().equals("")) {
+            String[] cols = getDetails().split("\\|");
+            for (String col1 : cols) {
+                String[] items = col1.split(",");
+                int columnIndex = Integer.valueOf(items[0]);
+                DashboardColumn col = null;
+                if (columns.size() >= columnIndex + 1) {
+                    col = columns.get(columnIndex);
+                }
+                if (col == null) {
+                    col = new DefaultDashboardColumn();
+                    columns.add(col);
+                }
+                col.addWidget(items[1]);
             }
-
-            if (col == null) {
-                col = new DefaultDashboardColumn();
-                columns.add(col);
-            }
-            col.addWidget(items[1]);
         }
         return columns;
     }

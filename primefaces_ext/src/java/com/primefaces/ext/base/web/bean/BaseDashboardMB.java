@@ -1,10 +1,11 @@
-package com.primefaces.ext.base.web;
+package com.primefaces.ext.base.web.bean;
 
+import com.primefaces.ext.base.util.BaseLogger;
 import com.primefaces.ext.base.web.view.dao.DashboardSB;
 import com.primefaces.ext.base.web.view.dao.PanelModelSB;
-import com.primefaces.ext.base.web.view.entity.AjaxModel;
+import com.primefaces.ext.base.web.view.entity.BaseAjaxModel;
 import com.primefaces.ext.base.web.view.entity.BaseDashboardModel;
-import com.primefaces.ext.base.web.view.entity.PanelModel;
+import com.primefaces.ext.base.web.view.entity.BasePanelModel;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,13 +26,13 @@ import org.primefaces.event.ToggleEvent;
 
 /**
  *
- * @author 041863
+ * @author Jason
  */
-
 public abstract class BaseDashboardMB {
 
+    protected final BaseLogger LOGGER = new BaseLogger(this.getClass());
     private Dashboard dashboard;
-    private List<PanelModel> panels;
+    private List<BasePanelModel> panels;
     private BaseDashboardModel basedashboard;
     @EJB
     private DashboardSB dashboardSB;
@@ -47,20 +48,27 @@ public abstract class BaseDashboardMB {
 
     public void restoreDashboard() {
         StringBuilder sb = new StringBuilder();
-        for (PanelModel p : panels) {
+        for (BasePanelModel p : panels) {
             sb.append(p.getColumnIndex()).append(",").append(p.getId()).append(",").append(p.getItemIndex()).append("|");
         }
-        sb.replace(sb.length() - 1, sb.length(), "");
-
-        dashboardSB.update(basedashboard.getId(), "details", sb.toString());
-        basedashboard = dashboardSB.findAll().get(0);
+        if (sb.length() != 0) {
+            sb.replace(sb.length() - 1, sb.length(), "");
+            dashboardSB.update(basedashboard.getId(), "details", sb.toString());
+            basedashboard = dashboardSB.findSingleByField("customeKey", getCustomeKey());
+        } else {
+            LOGGER.info("panel config not found with customeKey: " + getCustomeKey());
+        }
     }
 
     @PostConstruct
     public void init() {
         panels = panelModelSB.findByField("customeKey", getCustomeKey());
-        basedashboard = dashboardSB.findByField("customeKey", getCustomeKey()).get(0);
-        if (basedashboard.getDetails() == null) {
+        basedashboard = dashboardSB.findSingleByField("customeKey", getCustomeKey());
+        if (basedashboard == null) {
+            LOGGER.info("dashboard config not found with customeKey: " + getCustomeKey());
+            return;
+        }
+        if (basedashboard.getDetails() == null || basedashboard.getDetails().equals("")) {
             restoreDashboard();
         }
         dashboard = new Dashboard();
@@ -72,7 +80,7 @@ public abstract class BaseDashboardMB {
         Application application = fc.getApplication();
         ELContext elContext = fc.getELContext();
         FaceletContext faceletContext = (FaceletContext) FacesContext.getCurrentInstance().getAttributes().get(FaceletContext.FACELET_CONTEXT_KEY);
-        for (PanelModel p : panels) {
+        for (BasePanelModel p : panels) {
             Panel panel = (Panel) application.createComponent(fc, "org.primefaces.component.Panel", "org.primefaces.component.PanelRenderer");
             panel.setId(p.getId());
             panel.setHeader(p.getHeader());
@@ -81,10 +89,10 @@ public abstract class BaseDashboardMB {
             panel.setStyle(p.getStyle());
             panel.setToggleOrientation(p.getToggleOrientation());
             panel.setCollapsed(p.getCollapsed());
-            panel.setStyleClass(p.getStyleClass());//TODO: other fields
+            panel.setStyleClass(p.getStyleClass());//TODO: COPY other fields
 
             ExpressionFactory ef = fc.getApplication().getExpressionFactory();
-            for (AjaxModel a : p.getAjaxModels()) {
+            for (BaseAjaxModel a : p.getAjaxModels()) {
                 AjaxBehavior behavior = new AjaxBehavior();
                 behavior.setOncomplete(a.getOncomplete());
                 behavior.setOnsuccess(a.getOnsuccess());
@@ -96,8 +104,8 @@ public abstract class BaseDashboardMB {
             if (p.getInclude() != null) {
                 try {
                     faceletContext.includeFacelet(panel, p.getInclude());
-                } catch (IOException ex) {
-                    Logger.getLogger(BaseDashboardMB.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    LOGGER.error("ui include error with panel : " + p.getId() + " src " + p.getInclude());
                 }
             }
         }
@@ -111,11 +119,11 @@ public abstract class BaseDashboardMB {
         this.dashboard = dashboard;
     }
 
-    public List<PanelModel> getPanels() {
+    public List<BasePanelModel> getPanels() {
         return panels;
     }
 
-    public void setPanels(List<PanelModel> panels) {
+    public void setPanels(List<BasePanelModel> panels) {
         this.panels = panels;
     }
 
@@ -126,6 +134,11 @@ public abstract class BaseDashboardMB {
         dashboardSB.update(basedashboard.getId(), "details", dashboardOrder);
     }
 
+    /**
+     * in testing
+     *
+     * @param event
+     */
     public void onToggle(ToggleEvent event) {
         panelModelSB.update(event.getComponent().getId(), "collapsed", event.getVisibility().name().equals("VISIBLE"));
     }

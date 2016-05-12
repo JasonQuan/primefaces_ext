@@ -2,6 +2,7 @@ package com.primefaces.ext.base.web.view.entity;
 
 import com.primefaces.ext.base.entity.AbstractEntity;
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,41 +12,63 @@ import javax.persistence.Table;
 
 /**
  *
- * @author 041863
+ * @author Jason
  */
-@Table(name = "Ajax_Model")
+@Table(name = "BASE_AJAX_MODEL")
 @Entity
-public class AjaxModel extends AbstractEntity implements Serializable {
+public class BaseAjaxModel extends AbstractEntity implements Serializable {
 
     @ManyToOne
-    private PanelModel panelModel;
+    private BasePanelModel panelModel;
 
     @Id
     @GeneratedValue(generator = "system-uuid")
     @Column(name = "ID", nullable = false, length = 32)
+    @Basic
     private String id;
+    @Basic
     private String event;
+    @Basic
     private String updates;
+    @Basic
     private String process;
+    @Basic
     private String globals;
+    @Basic
     private String async;
+    @Basic
     private String oncomplete;
+    @Basic
     private String onerror;
+    @Basic
     private String onsuccess;
+    @Basic
     private String onstart;
+    @Basic
     private String listener;
+    @Basic
     private Boolean immediates;
+    @Basic
     private Boolean disabled;
+    @Basic
     private Boolean partialSubmit;
+    @Basic
     private Boolean resetValues;
+    @Basic
     private Boolean ignoreAutoUpdate;
+    @Basic
     private String delay;
+    @Basic
     private Integer timeout;
+    @Basic
     private String partialSubmitFilter;
     private String form;
+    @Basic
     private String skipChildren;
+    @Basic
     private String customeKey;
 
+    @Override
     public String getId() {
         return id;
     }
@@ -62,11 +85,11 @@ public class AjaxModel extends AbstractEntity implements Serializable {
         this.event = event;
     }
 
-    public PanelModel getPanelModel() {
+    public BasePanelModel getPanelModel() {
         return panelModel;
     }
 
-    public void setPanelModel(PanelModel panelModel) {
+    public void setPanelModel(BasePanelModel panelModel) {
         this.panelModel = panelModel;
     }
 

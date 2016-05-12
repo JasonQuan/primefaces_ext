@@ -3,6 +3,7 @@ package com.primefaces.ext.base.web.view.entity;
 import com.primefaces.ext.base.entity.AbstractEntity;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,37 +13,56 @@ import javax.persistence.Table;
 
 /**
  *
- * @author 041863
+ * @author Jason
  */
-@Table(name = "Panel_Model")
+@Table(name = "BASE_PANEL_MODEL")
 @Entity
-public class PanelModel extends AbstractEntity implements Serializable {
+public class BasePanelModel extends AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
     @Column(name = "ID", nullable = false, length = 32)
     private String id;
+    @Basic
     private String widgetVar;
+    @Basic
     private String header;
+    @Basic
     private String footer;
+    @Basic
     private boolean toggleable;
+    @Basic
     private String toggleSpeed;
+    @Basic
     private String style;
+    @Basic
     private String styleClass;
+    @Basic
     private boolean collapsed;
+    @Basic
     private boolean closable;
+    @Basic
     private String closeSpeed;
+    @Basic
     private boolean visible;
+    @Basic
     private String closeTitle;
+    @Basic
     private String toggleTitle;
+    @Basic
     private String menuTitle;
+    @Basic
     private String toggleOrientation;
+    @Basic
     private String include;
+    @Basic
     private String customeKey;
+    @Basic
     private int columnIndex;
+    @Basic
     private int itemIndex;
     @OneToMany(mappedBy = "panelModel")
-    private List<AjaxModel> ajaxModels;
+    private List<BaseAjaxModel> ajaxModels;
 
     @Override
     public String getId() {
@@ -53,11 +73,11 @@ public class PanelModel extends AbstractEntity implements Serializable {
         this.id = id;
     }
 
-    public List<AjaxModel> getAjaxModels() {
+    public List<BaseAjaxModel> getAjaxModels() {
         return ajaxModels;
     }
 
-    public void setAjaxModels(List<AjaxModel> ajaxModels) {
+    public void setAjaxModels(List<BaseAjaxModel> ajaxModels) {
         this.ajaxModels = ajaxModels;
     }
 

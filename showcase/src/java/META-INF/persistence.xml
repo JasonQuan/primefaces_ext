@@ -5,8 +5,11 @@
     <jta-data-source>java:app/mysql-demo</jta-data-source>
     <class>demo.entity.Students</class>
     <class>com.primefaces.ext.base.web.view.entity.BaseColumnModel</class>
+    <class>com.primefaces.ext.base.web.view.entity.BaseAjaxModel</class>
+    <class>com.primefaces.ext.base.web.view.entity.BaseDashboardModel</class>
+    <class>com.primefaces.ext.base.web.view.entity.BasePanelModel</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
-    <shared-cache-mode>ALL</shared-cache-mode>
+    <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
     <validation-mode>NONE</validation-mode>
     <properties>
       <property name="eclipselink.session.customizer" value="com.primefaces.ext.base.util.UUIDSequence"/>
