@@ -273,6 +273,12 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
     private Boolean isExtButton;
     @Transient
     private Boolean isExtSelect;
+    
+    /**
+     * TODO: order column when export
+     */
+    @Transient
+    private int exportOrder;
 
     public BaseColumnModel() {
     }
@@ -286,6 +292,14 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
 
     public void setDataType(String dataType) {
         this.dataType = dataType;
+    }
+
+    public int getExportOrder() {
+        return exportOrder;
+    }
+
+    public void setExportOrder(int exportOrder) {
+        this.exportOrder = exportOrder;
     }
 
     public String getSortBy() {
