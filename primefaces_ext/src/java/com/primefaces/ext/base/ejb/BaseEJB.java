@@ -956,7 +956,7 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
                         } else {
                             jpql = jpql + " and o." + fieldName + " LIKE '%" + condantion.toString().trim() + "%' ";
                         }
-                    } else if (ObjectUtil.isInterger(fieldType)) {
+                    } else if (ObjectUtil.isInterger(fieldType) || ObjectUtil.isInt(fieldType)) {
                         if (ObjectUtil.isArray(condantion)) {
                             Object[] strs = (Object[]) condantion;
                             if (ArrayUtils.isNotEmpty(strs)) {
@@ -1790,5 +1790,5 @@ public abstract class BaseEJB<T extends AbstractEntity, E extends AbstractEntity
     
     public void updateOtherEntity(Class<? extends AbstractEntity> t){
         getEntityManager().merge(t);
-    }
+}
 }
