@@ -6,7 +6,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Dynamic Data Table showcase</title>
-        <ui:include src="code_sources.xhtml"/>
     </h:head>
     <h:body>
         <p:growl id="growl" />
@@ -51,6 +50,7 @@
                 <p:outputLabel for="exportSelect" value="export Select"/>
                 <p:selectBooleanCheckbox id="exportSelect" value="#{demoMB.exportSelect}"/>
                 <p:commandButton value="update table" ajax="false" actionListener="#{demoMB.initTable()}"/>
+                <p:commandButton process="@this" value="View Source" icon="ui-icon-extlink" actionListener="#{demoMB.openSource}"/>
             </p:panelGrid>
         </h:form>
         <h:form prependId="false">                
@@ -79,19 +79,6 @@
             </b:table>
         </h:form>
 
-        <p:tabView>
-            <p:tab title="XHTML page">
-                <pre name="code" class="xml">#{showcaseUtil.getFileContent('/demo.xhtml')}</pre>
-            </p:tab>
-            <p:tab title="Managed bean">
-                <pre name="code" class="java">#{showcaseUtil.getFileContent('/demo/jsf/DemoMB.java')}</pre>
-            </p:tab>
-            <p:tab title="EJB">
-                <pre name="code" class="java">#{showcaseUtil.getFileContent('/demo/ejb/StudentsSB.java')}</pre>
-            </p:tab>
-            <p:tab title="Entity">
-                <pre name="code" class="java">#{showcaseUtil.getFileContent('/demo/entity/Students.java')}</pre>
-            </p:tab>
-        </p:tabView>
+
     </h:body>
 </html>

@@ -8,7 +8,10 @@ import com.primefaces.ext.base.web.BaseMB;
 
 import demo.ejb.StudentsSB;
 import demo.entity.Students;
+import java.util.HashMap;
+import java.util.Map;
 import javax.faces.bean.SessionScoped;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @SessionScoped
@@ -44,7 +47,12 @@ public class DemoMB extends BaseMB<Students, Students> {
     protected BaseEJB<Students, Students> dao() {
         return studentsSB;
     }
-
+    public void openSource() {
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("maximizable", true);
+        options.put("minimizable", true);
+        RequestContext.getCurrentInstance().openDialog("demo_sources", options, null);
+    }
     public void initTable() {
         setDataModel(null);
         setEntitys(null);

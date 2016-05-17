@@ -18,7 +18,7 @@ public class DashboardMB extends BaseDashboardMB {
     public void openSource() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("maximizable", true);
-        options.put("width", "600");
+        options.put("minimizable", true);
         RequestContext.getCurrentInstance().openDialog("dashboard_sources", options, null);
     }
 }
