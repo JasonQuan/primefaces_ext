@@ -47,12 +47,16 @@ public class DemoMB extends BaseMB<Students, Students> {
     protected BaseEJB<Students, Students> dao() {
         return studentsSB;
     }
+
     public void openSource() {
         Map<String, Object> options = new HashMap<String, Object>();
         options.put("maximizable", true);
         options.put("minimizable", true);
+        options.put("contentHeight", 500);
+        options.put("contentWidth", 1024);
         RequestContext.getCurrentInstance().openDialog("demo_sources", options, null);
     }
+
     public void initTable() {
         setDataModel(null);
         setEntitys(null);
