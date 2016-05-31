@@ -205,7 +205,7 @@
                 </h:panelGroup>
                 <h:panelGroup rendered="#{cc.attrs.globalFilter}" style="float:right;">
                     <!--TODO: searche event-->
-                    <p:inputText id="extGlobalFilter" onkeypress="if (event.keyCode == 13){PF('entity_tableTable').filter();}"
+                    <p:inputText id="extGlobalFilter" onkeypress="if (event.keyCode === 13){PF('entity_tableTable').filter();}"
                         style="width:150px" placeholder="Quick Search">
                     </p:inputText>
                     <p:commandButton process="extGlobalFilter,@this"
@@ -245,11 +245,11 @@
 
             <p:column rendered="#{cc.attrs.showIndex}" headerText="NO"
                       style="width: 30px;text-align: center;" 
-                      exportable="false"
+                      exportable="false" 
                       toggleable="false">
                 <h:outputText value="#{index+1}"/>
             </p:column>
-            <p:column rendered="#{(cc.attrs.selected eq 'entity') or (cc.attrs.selected eq 'entitys')}" selectionMode="#{cc.attrs.selected eq 'entity'?'single':'multiple'}"
+            <pe:column rendered="#{(cc.attrs.selected eq 'entity') or (cc.attrs.selected eq 'entitys')}" selectionMode="#{cc.attrs.selected eq 'entity'?'single':'multiple'}"
                       exportable="false"
                       style="width:24px;text-align:center"/>
             <c:forEach items="#{cc.attrs.controller.columns}" var="column">     
@@ -258,13 +258,13 @@
                 </c:if>
 
                 <c:if test="#{!column.isExtInclude}">
-                    <p:column
+                    <pe:column
                         headerText="#{column.header}"                    
                         exportable="false"
-                        id="columns"       
+                        id="columns"
                         styleClass="ba-column columnId-#{column.id}"
                         style="width:#{column.width};#{column.style};"
-                        rendered="#{column.hasExtFunction}">
+                        rendered="#{column.hasExtFunction}" exportSort="#{column.exportSort}">
                         <span style="display: none"/>
                         <p:commandButton 
                             rendered="#{column.isExtButton and entity[column.extRendered]}"
@@ -291,8 +291,8 @@
                             <f:selectItems value="#{cc.attrs.controller[column.dropDown]}" />
                             <p:ajax event="valueChange" update="#{column.onupdate}"/>
                         </h:selectOneMenu>
-                    </p:column>
-                    <p:column
+                    </pe:column>
+                    <pe:column
                         rendered="#{!column.hasExtFunction}"
                         id="columns" 
                         field="#{column.field}"
@@ -303,6 +303,7 @@
                         toggleable="#{column.toggleable}"
                         styleClass="ba-column columnId-#{column.id} #{column.styleClass}"
                         sortBy="#{false?entity[column.field]:''}"
+                        exportSort="#{column.exportSort}"
                         filterBy="#{entity[column.field]}">
                         <c:if test="#{cc.attrs.filter}">
                             <f:facet name="filter">
@@ -471,15 +472,15 @@
                                 </h:outputText>                                 
                             </f:facet>
                         </p:cellEditor>
-                    </p:column>
+                    </pe:column>
 
                 </c:if>                            
             </c:forEach>
-            <p:column rendered="#{cc.attrs.deleteRow}" exportable="false">
+            <pe:column rendered="#{cc.attrs.deleteRow}" exportable="false">
                 <p:commandLink value="delete"
                                actionListener="#{cc.attrs.controller.remove(entity)}"
                                process="entity_table" update="entity_table,:growl"/>
-            </p:column>
+            </pe:column>
             <cc:insertChildren/>            
         </p:dataTable>
         <p:blockUI block="entity_table" widgetVar="blockUI" trigger="entity_table" blocked="false" animate="true">

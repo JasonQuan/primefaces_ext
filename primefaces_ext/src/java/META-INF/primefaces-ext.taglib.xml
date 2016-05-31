@@ -4,7 +4,12 @@
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd">
     <namespace>http://primefaces.org/ui/ext</namespace>
-   
+    <tag>
+        <tag-name>column</tag-name>
+        <component>
+            <component-type>com.primefaces.ext.component.Column</component-type>
+        </component>
+    </tag>
     <tag>
         <tag-name>exporter</tag-name>
         <handler-class>
@@ -65,5 +70,5 @@
             <type>java.lang.Boolean</type>
         </attribute>
     </tag>
-	 
+    
 </facelet-taglib>

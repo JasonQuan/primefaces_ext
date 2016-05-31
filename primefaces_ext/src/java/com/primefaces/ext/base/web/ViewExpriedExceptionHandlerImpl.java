@@ -12,7 +12,7 @@ public class ViewExpriedExceptionHandlerImpl extends ViewExpiredExceptionHandler
 
     @Override
     public String redirectPage() {
-        return "/page/expried.xhtml";
+        return "/";
     }
 
 }

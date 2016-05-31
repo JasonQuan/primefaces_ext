@@ -15,10 +15,9 @@ import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.convert.Converter;
 import org.primefaces.component.celleditor.CellEditor;
 import org.primefaces.component.datatable.DataTable;
-import org.primefaces.component.export.ExcelExporter;
 import org.primefaces.util.ComponentUtils;
 
-public class ExtExcelExporter extends ExcelExporter {
+public class ExtExcelExporter extends XSSHExcel {
 
     @Override
     protected String exportValue(FacesContext context, UIComponent component) {

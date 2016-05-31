@@ -123,6 +123,12 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
     @Column(name = "EXPORT_TABLE")
     private Boolean exportable = Boolean.TRUE;
     @ColumnHelper
+    @Column(name = "EXPORT_SORT")
+    private int exportSort;
+    @ColumnHelper
+    @Column(name = "EXPORT_HEADER")
+    private int exportHeader;
+    @ColumnHelper
     @Column(name = "WIDTH")
     private String width;
     @ColumnHelper
@@ -273,13 +279,10 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
     private Boolean isExtButton;
     @Transient
     private Boolean isExtSelect;
-    
+
     /**
      * TODO: order column when export
      */
-    @Transient
-    private int exportOrder;
-
     public BaseColumnModel() {
     }
 
@@ -294,12 +297,20 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
         this.dataType = dataType;
     }
 
-    public int getExportOrder() {
-        return exportOrder;
+    public int getExportSort() {
+        return exportSort;
     }
 
-    public void setExportOrder(int exportOrder) {
-        this.exportOrder = exportOrder;
+    public void setExportSort(int exportSort) {
+        this.exportSort = exportSort;
+    }
+
+    public int getExportHeader() {
+        return exportHeader;
+    }
+
+    public void setExportHeader(int exportHeader) {
+        this.exportHeader = exportHeader;
     }
 
     public String getSortBy() {
@@ -964,8 +975,8 @@ public class BaseColumnModel extends AbstractEntity implements Serializable {
     public void setConverterId(String converterId) {
         this.converterId = converterId;
     }
-    
-    public boolean hasConverterId(){
+
+    public boolean hasConverterId() {
         return StringUtils.isNotBlank(converterId);
     }
 }

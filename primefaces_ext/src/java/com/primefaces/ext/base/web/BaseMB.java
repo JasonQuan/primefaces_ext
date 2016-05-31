@@ -54,6 +54,11 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -1067,25 +1072,25 @@ public abstract class BaseMB<T extends AbstractEntity, E extends AbstractEntity>
     }
 
     public void postExportExcel(Object doc) {
-        HSSFWorkbook wb = (HSSFWorkbook) doc;
-        HSSFSheet sheet = wb.getSheetAt(0);
+        XSSFWorkbook wb = (XSSFWorkbook) doc;
+        XSSFSheet sheet = wb.getSheetAt(0);
 
-        HSSFCellStyle styleHeader = wb.createCellStyle();
+        XSSFCellStyle styleHeader = wb.createCellStyle();
         styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
         styleHeader.setFillForegroundColor(HSSFColor.GREY_40_PERCENT.index);
         styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
         styleHeader.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
         styleHeader.setWrapText(true);
 
-        HSSFCellStyle sheetStyle = wb.createCellStyle();
+        XSSFCellStyle sheetStyle = wb.createCellStyle();
         sheetStyle.setAlignment(CellStyle.ALIGN_CENTER);
         sheetStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
 
-        HSSFRow row0 = sheet.getRow(0);
+        XSSFRow row0 = sheet.getRow(0);
         row0.setHeight((short) 600);
         for (int c = 0; c < row0.getPhysicalNumberOfCells(); c++) {
             sheet.autoSizeColumn(c, true);
-            HSSFCell header = row0.getCell(c);
+            XSSFCell header = row0.getCell(c);
             if (header.getStringCellValue().contains("<br>")) {
                 header.setCellValue(new HSSFRichTextString(row0.getCell(c).getStringCellValue().replaceAll("<br>", "\r\n")));
             }
