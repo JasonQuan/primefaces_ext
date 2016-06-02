@@ -1,9 +1,8 @@
 package com.primefaces.ext.base.util;
 
 import java.io.Serializable;
+import org.apache.log4j.Logger;
 
-import org.jboss.logging.Logger;
- 
 public class BaseLogger implements Serializable{
 	protected static Logger logger;
 
