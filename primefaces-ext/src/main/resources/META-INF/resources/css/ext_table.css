@@ -1,0 +1,95 @@
+* {
+    font-size: 12px;
+}
+
+.app_content {
+    border: 0;
+    padding: 0;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+    padding: 0;
+}
+
+.ui-column-title {
+    font-size: 12px;
+}
+
+.ba-column {
+    font-size: 12px;
+}
+
+.ba-column span {
+    font-size: 12px;
+}
+
+.ui-steps .ui-steps-item {
+    width: 24%;
+}
+
+.ui-state-highlight {
+    text-shadow: none !important;
+}
+
+.ui-steps.custom {
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+    text-align: center !important;
+    height: 10px;
+    padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+    background-color: #0081c2;
+    color: #FFFFFF;
+    display: inline-block;
+    width: 30px;
+    border-radius: 10px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.ui-widget .ui-widget {
+    font-size: 12px;
+}
+
+.ui-outputlabel-rfi {
+    color: red;
+}
+
+.filter-boolean>div>span {
+    padding: 0 1px 0 1px !important;
+}
+
+.dt-multi-filter-panel>div>a>span {
+    background-position: -160px -112px;
+}
+.calendarComponent input {
+    width:80px;
+}
+.selectCheckboxMenu{
+    width: 100%;
+}
+
+.ui-cell-editor-input input{
+    width: 100%;
+}
+.ui-column-customfilter input{
+    width: 90%;
+}
+.ui-cell-editor-output{
+    text-align: center;
+}
+.ui-cell-editor-output *,.ui-column-title,.ui-column-customfilter{
+    white-space: nowrap;
+}
+.ui-datatable-header {
+    height: 20px;
+}
+.ui-picklist table{
+    width:auto!important;
+}

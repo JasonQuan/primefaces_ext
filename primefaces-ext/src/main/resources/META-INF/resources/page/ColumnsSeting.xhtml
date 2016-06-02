@@ -1,0 +1,1345 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:b="http://xmlns.jcp.org/jsf/composite/b"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <style>
+            .new_column_dialog div:nth-child(2){
+                padding: 0;
+            }
+            .new_column_dialog div:nth-child(2) div:nth-child(2){
+                padding: 0;
+            }
+        </style>
+    </h:head>
+    <p:growl id="growl" showDetail="true" showSummary="true" />
+    <h:form id="form" prependId="false">
+        <p:commandButton style="display: none;" />
+        <p:commandButton id="create_new" value="Create EXT Column"
+                         process="@this" update="growl,outputPanel_create_column"
+                         oncomplete="PF('modify_column').hide();PF('create_new_column').show();">
+            <p:resetInput target="outputPanel_create_column" />
+        </p:commandButton>
+        <p:commandButton id="init_columns" value="Init Columns"
+                         title="click this button will init all entitys field,if the field already will ignore, if the field has annotation '@Transient' it will hiden on table by default configuration"
+                         actionListener="#{baseColumnModelMB.initColumns()}" process="@this"
+                         update=":growl,@form" />
+
+        <b:table id="baseTable" controller="#{baseColumnModelMB}" sort="true"
+                 globalFilter="true" cellEdit="true" draggableColumns="true"
+                 filter="true" 
+                 exportALl="true"                 
+                 exportPage="true"
+                 exportSelect="true" advanceColumnToggler="true"
+                 selected="entitys" deleteRow="true" removeSelect="true" addOneRecord="true"
+                 freezeColumns="4" uiDatatableTable="width:auto;"
+                 resizableColumns="false" />
+        <p:blockUI block="form" trigger="init_columns">
+            PROCESSING ...<br />
+            <p:graphicImage library="img" name="ajaxloadingbar.gif" />
+        </p:blockUI>
+        <p:dialog widgetVar="create_new_column" modal="false"
+                  header="Create Ext Columns" styleClass="new_column_dialog" resizable="false">
+            <p:ajax event="close" process="@this"
+                    listener="#{baseColumnModelMB.reset()}" />
+            <p:outputPanel id="outputPanel_create_column">
+                <p:remoteCommand name="resetExt" process="@this"
+                                 update="outputPanel_create_column"
+                                 actionListener="#{baseColumnModelMB.reset()}" />
+                <p:tabView>
+                    <p:ajax event="tabChange" oncomplete="resetExt()" />
+                    <p:tab title="Add Ext Button">
+                        <p:panelGrid columns="2" style="border:none;" id="button_ext">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+
+                                <p:outputLabel for="create_mb" value="Managed Bean"
+                                               title="Select Mangerd Bean for help select ActionListener" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="create_mb" value="#{baseColumnModelMB.managedClass}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.managedItems}" />
+                                    <p:ajax event="valueChange" update="button_ext" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="create_extType" value="Ext Type" />
+                                <p:selectOneMenu id="create_extType" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.extType}">
+                                    <f:selectItem itemValue="button" itemLabel="Button" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="create_entity" value="Entity" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="create_entity" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.entity}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.entityItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="create_customerKey" value="Customer Key" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="create_customerKey" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.customsKey}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.customeKeyItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="create_header" value="Header" />
+                                <p:inputText id="create_header" required="true"
+                                             placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+
+                                <p:outputLabel for="create_extFunction" value="ActionListener" />
+                                <p:autoComplete id="create_extFunction" required="true"
+                                                placeholder="actionListener name" dropdown="true"
+                                                value="#{baseColumnModelMB.extBaseColumnModel.extFunction}"
+                                                scrollHeight="400"                                                
+                                                completeMethod="#{baseColumnModelMB.autocompleteExtListener}" />
+
+                                <p:outputLabel for="create_extRendered" value="Rendered" />
+                                <p:inputText id="create_extRendered"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extRendered}" />
+
+                                <p:outputLabel for="create_style" value="Style" />
+                                <p:inputText id="create_style" placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="create_extValue" value="Value" />
+                                <p:inputText id="create_extValue" placeholder="button text"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extValue}" />
+
+
+                                <p:outputLabel for="create_extIcon" value="Icon" />
+                                <p:inputText id="create_extIcon"
+                                             placeholder="Default is ui-icon-search"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extIcon}" />
+
+
+                                <p:outputLabel for="create_title" value="Title" />
+                                <p:inputText id="create_title" placeholder="html title"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.title}" />
+
+                            </p:panelGrid>
+                            <h:panelGrid columns="1">
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        <h:outputText value="EXT Event " />
+                                    </f:facet>
+                                    <p:outputLabel for="create_oncomplete" value="On complete" />
+                                    <p:inputText id="create_oncomplete"
+                                                 placeholder="javascript method"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.oncomplete}" />
+
+                                    <p:outputLabel for="create_onupdate" value="On update" />
+                                    <p:inputText id="create_onupdate"
+                                                 placeholder="component id for update"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.onupdate}" />
+
+                                    <p:outputLabel for="create_onsuccess" value="On success" />
+                                    <p:inputText id="create_onsuccess"
+                                                 placeholder="javascript method"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.onsuccess}" />
+
+                                    <p:outputLabel for="create_onstart" value="On start" />
+                                    <p:inputText id="create_onstart"
+                                                 placeholder="javascript method"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.onstart}" />
+                                </p:panelGrid>
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        <h:outputText value="EXT Primefaces Ajax Event " />
+                                    </f:facet>
+                                    <p:outputLabel for="create_ajaxEvent" value="Ajax Event" />
+                                    <p:inputText id="create_ajaxEvent"
+                                                 placeholder="eg: dialogReturn"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxEvent}" />
+
+                                    <p:outputLabel for="create_ajaxLisenter" value="Ajax Lisenter" />
+                                    <p:inputText id="create_ajaxLisenter" placeholder="listener"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxLisenter}" />
+
+                                    <p:outputLabel for="create_ajaxProcess" value="Ajax Process" />
+                                    <p:inputText id="create_ajaxProcess" placeholder="component id"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxProcess}" />
+
+                                    <p:outputLabel for="create_ajaxUpdate" value="Ajax Update" />
+                                    <p:inputText id="create_ajaxUpdate" placeholder="component id"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxUpdate}" />
+                                </p:panelGrid>
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="button_ext"
+                                                 update="growl,button_ext"
+                                                 actionListener="#{baseColumnModelMB.createColumn}" />
+                                <p:spacer width="20" height="40" />
+                                <p:commandButton value="Reset" process="@this"
+                                                 update="growl,button_ext">
+                                    <p:resetInput target="button_ext" />
+                                </p:commandButton>
+                                <p:spacer width="20" />
+                                <p:commandButton value="Cancal" process="@this"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('create_new_column').hide();">
+                                    <p:resetInput target="button_ext" />
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="Add Ext Pull Down List">
+                        <p:panelGrid columns="2" style="border:none;" id="pull_down_ext">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+
+                                <p:outputLabel for="pull_down_ext_mb" value="Managed Bean" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="pull_down_ext_mb" value="#{baseColumnModelMB.managedClass}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.managedItems}" />
+                                    <p:ajax event="valueChange" update="pull_down_ext"
+                                            listener="#{baseColumnModelMB.resetManagedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="pull_down_create_extType" value="Ext Type" />
+                                <p:selectOneMenu id="pull_down_create_extType" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.extType}">
+                                    <f:selectItem itemValue="select" itemLabel="Pull Down List" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="pull_down_create_entity" value="Entity" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="pull_down_create_entity" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.entity}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.entityItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="pull_down_create_customerKey"
+                                               value="Customer Key" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="pull_down_create_customerKey" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.customsKey}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.customeKeyItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="pull_down_create_header" value="Header" />
+                                <p:inputText id="pull_down_create_header" required="true"
+                                             placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+                                <p:outputLabel for="pull_down_create_dropDown"
+                                               rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                               value="DropDown list" />
+                                <p:inputText id="pull_down_create_dropDown" required="true"
+                                             placeholder="SelectItems[]"
+                                             rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.dropDown}" />
+
+                                <p:outputLabel for="pull_down_create_dropDowns"
+                                               rendered="#{baseColumnModelMB.hasManagerBean}"
+                                               value="DropDown list" />
+                                <p:selectOneMenu id="pull_down_create_dropDowns" required="true"
+                                                 rendered="#{baseColumnModelMB.hasManagerBean}"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.dropDown}">
+                                    <f:selectItems value="#{baseColumnModelMB.managedBeanFields}" />
+                                </p:selectOneMenu>
+
+
+                                <p:outputLabel for="pull_down_create_field" value="Field" />
+                                <p:inputText id="pull_down_create_field" required="true"
+                                             placeholder="Entity Field"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.field}" />
+
+
+                                <p:outputLabel for="pull_down_create_extRendered"
+                                               value="Rendered" />
+                                <p:inputText id="pull_down_create_extRendered"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extRendered}" />
+
+                                <p:outputLabel for="pull_down_create_style" value="Style" />
+                                <p:inputText id="pull_down_create_style" placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="pull_down_create_title" value="Title" />
+                                <p:inputText id="pull_down_create_title"
+                                             placeholder="html title"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.title}" />
+
+                            </p:panelGrid>
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="EXT Event " />
+                                </f:facet>
+                                <p:outputLabel for="pull_down_create_oncomplete"
+                                               value="On complete" />
+                                <p:inputText id="pull_down_create_oncomplete"
+                                             placeholder="javascript method"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.oncomplete}" />
+
+                                <p:outputLabel for="pull_down_create_onupdate" value="On update" />
+                                <p:inputText id="pull_down_create_onupdate"
+                                             placeholder="value change update id"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.onupdate}" />
+
+                                <p:outputLabel for="pull_down_create_onsuccess"
+                                               value="On success" />
+                                <p:inputText id="pull_down_create_onsuccess"
+                                             placeholder="javascript method"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.onsuccess}" />
+
+                                <p:outputLabel for="pull_down_create_onstart" value="On start" />
+                                <p:inputText id="pull_down_create_onstart"
+                                             placeholder="javascript method"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.onstart}" />
+                            </p:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="pull_down_ext"
+                                                 update="growl,pull_down_ext"
+                                                 actionListener="#{baseColumnModelMB.createColumn}" />
+                                <p:spacer width="20" height="40" />
+                                <p:commandButton value="Reset" process="@this"
+                                                 update="growl,pull_down_ext">
+                                    <p:resetInput target="pull_down_ext" />
+                                </p:commandButton>
+                                <p:spacer width="20" />
+                                <p:commandButton value="Cancal" process="@this"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('create_new_column').hide();">
+                                    <p:resetInput target="pull_down_ext" />
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="Add Column">
+                        <p:panelGrid columns="2" style="border:none;" id="add_column">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+
+                                <p:outputLabel for="add_column_create_mb" value="Managed Bean" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="add_column_create_mb"
+                                                 value="#{baseColumnModelMB.managedClass}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.managedItems}" />
+                                    <p:ajax event="valueChange" update="add_column"
+                                            listener="#{baseColumnModelMB.resetManagedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_column_create_entity" value="Entity" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="add_column_create_entity" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.entity}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.entityItems}" />
+                                    <p:ajax event="valueChange" update="add_column_create_field"
+                                            listener="#{baseColumnModelMB.resetFieldItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_column_create_customerKey"
+                                               value="Customer Key" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="add_column_create_customerKey" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.customsKey}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.customeKeyItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_column_create_header" value="Header" />
+                                <p:inputText id="add_column_create_header" required="true"
+                                             placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+                                <p:outputLabel for="add_column_create_field" value="Field" />
+                                <p:selectOneMenu id="add_column_create_field" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.field}">
+                                    <f:selectItems value="#{baseColumnModelMB.fieldItems}" />
+                                    <p:ajax event="valueChange"
+                                            update="add_column_create_header,add_column_create_dataType"
+                                            listener="#{baseColumnModelMB.fieldChangeListener}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_column_create_dataType"
+                                               value="Data Type" />
+                                <p:selectOneMenu id="add_column_create_dataType" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.dataType}">
+                                    <f:selectItems value="#{baseColumnModelMB.dataTypeItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_column_create_tableColumn"
+                                               value="Table Column" />
+                                <p:inputText id="add_column_create_tableColumn"
+                                             placeholder="Column in Table "
+                                             value="#{baseColumnModelMB.extBaseColumnModel.tableColumn}" />
+
+                                <p:outputLabel for="add_column_create_dropDown"
+                                               rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                               value="Cell DropDown" />
+                                <p:inputText id="add_column_create_dropDown"
+                                             placeholder="SelectItems[]"
+                                             rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.dropDown}" />
+
+                                <p:outputLabel for="add_column_create_dropDowns"
+                                               rendered="#{baseColumnModelMB.hasManagerBean}"
+                                               value="Cell DropDown" />
+                                <p:selectOneMenu id="add_column_create_dropDowns"
+                                                 rendered="#{baseColumnModelMB.hasManagerBean}"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.dropDown}">
+                                    <f:selectItems value="#{baseColumnModelMB.managedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_column_create_filterOptions"
+                                               rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                               value="Filter DropDown" />
+                                <p:inputText id="add_column_create_filterOptions"
+                                             placeholder="SelectItems[]"
+                                             rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.filterOptions}" />
+
+                                <p:outputLabel for="add_column_create_filterOptionsz"
+                                               rendered="#{baseColumnModelMB.hasManagerBean}"
+                                               value="Filter DropDown" />
+                                <p:selectOneMenu id="add_column_create_filterOptionsz"
+                                                 rendered="#{baseColumnModelMB.hasManagerBean}"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.filterOptions}">
+                                    <f:selectItems value="#{baseColumnModelMB.managedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_column_create_title" value="Title" />
+                                <p:inputText id="add_column_create_title"
+                                             placeholder="html title"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.title}" />
+
+                                <p:outputLabel for="add_column_create_converterId" value="Converter Id" />
+                                <p:inputText id="add_column_create_converterId"
+                                             placeholder="converterId"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.converterId}" />
+
+                                <p:outputLabel for="add_column_create_outFormat"
+                                               value="Out Format" />
+                                <p:inputText id="add_column_create_outFormat"
+                                             placeholder="support Date and Digital Type"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.outFormat}" />
+
+                                <p:outputLabel for="add_column_create_sort" value="Sort" />
+                                <p:inputText id="add_column_create_sort" placeholder="sort"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.sort}" />
+                            </p:panelGrid>
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="EXT Options" />
+                                </f:facet>
+                                
+                                <p:outputLabel for="add_column_create_filterPlaceHolder"
+                                               value="Filter PlaceHolder" />
+                                <p:inputText id="add_column_create_filterPlaceHolder"
+                                             placeholder="Filter PlaceHolder"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.filterPlaceHolder}" />                                
+                                <p:outputLabel for="add_column_create_visible" value="Visible" />
+                                <p:selectOneRadio id="add_column_create_visible"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.visible}">
+                                    <f:selectItem itemValue="true" itemLabel="Visible" />
+                                    <f:selectItem itemValue="false" itemLabel="Hidden" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_column_create_edit" value="Can Edit" />
+                                <p:selectOneRadio id="add_column_create_edit"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.edit}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_column_create_filterable"
+                                               value="Column Filter" />
+                                <p:selectOneRadio id="add_column_create_filterable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.filterable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+
+                                <p:outputLabel for="add_column_create_sortable"
+                                               value="Column Sort" />
+                                <p:selectOneRadio id="add_column_create_sortable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.sortable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_column_create_toggleable"
+                                               value="Toggleable" />
+                                <p:selectOneRadio id="add_column_create_toggleable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.toggleable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_column_create_exportable"
+                                               value="Column Export" />
+                                <p:selectOneRadio id="add_column_create_exportable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.exportable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_column_create_resizable"
+                                               value="Column Resizable" />
+                                <p:selectOneRadio id="add_column_create_resizable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.resizable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_column_create_isMultiFilter"
+                                               value="Multi Select Filter" />
+                                <p:selectOneRadio id="add_column_create_isMultiFilter"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.isMultiFilter}">
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_column_create_style" value="Style" />
+                                <p:inputText id="add_column_create_style"
+                                             placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="add_column_create_styleClass"
+                                               value="Css Class" />
+                                <p:inputText id="add_column_create_styleClass"
+                                             placeholder="css class"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.styleClass}" />
+
+                            </p:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="add_column"
+                                                 update="growl,add_column"
+                                                 actionListener="#{baseColumnModelMB.createColumn}" />
+                                <p:spacer width="20" height="40" />
+                                <p:commandButton value="Reset" process="@this"
+                                                 update="growl,add_column">
+                                    <p:resetInput target="add_column" />
+                                </p:commandButton>
+                                <p:spacer width="20" />
+                                <p:commandButton value="Cancal" process="@this"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('create_new_column').hide();">
+                                    <p:resetInput target="add_column" />
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="Add Include Column">
+                        <p:panelGrid columns="2" style="border:none;"
+                                     id="add_include_column">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+                                <p:outputLabel for="add_include_column_extType" value="Ext Type" />
+                                <p:selectOneMenu id="add_include_column_extType"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.extType}">
+                                    <f:selectItem itemValue="include" itemLabel="UI Include" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_include_column_create_entity"
+                                               value="Entity" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="add_include_column_create_entity" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.entity}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.entityItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_include_column_create_customerKey"
+                                               value="Customer Key" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="add_include_column_create_customerKey" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.customsKey}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.customeKeyItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="add_include_column_create_include"
+                                               value="UI Include src" />
+                                <p:inputText id="add_include_column_create_include"
+                                             required="true" placeholder="path for xhtml file"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.include}" />
+
+                                <p:outputLabel for="add_include_column_create_sort" value="Sort" />
+                                <p:inputText id="add_include_column_create_sort"
+                                             placeholder="sort"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.sort}" />
+
+                                <p:outputLabel for="add_include_column_create_header"
+                                               value="Header" />
+                                <p:inputText id="add_include_column_create_header"
+                                             required="true" placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+                                <p:outputLabel for="add_include_column_create_style"
+                                               value="Style" />
+                                <p:inputText id="add_include_column_create_style"
+                                             placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="add_include_column_create_styleClass"
+                                               value="Css Class" />
+                                <p:inputText id="add_include_column_create_styleClass"
+                                             placeholder="css class"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.styleClass}" />
+                            </p:panelGrid>
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="EXT Options" />
+                                </f:facet>
+                                <p:outputLabel for="add_include_column_create_visible"
+                                               value="Visible" />
+                                <p:selectOneRadio id="add_include_column_create_visible"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.visible}">
+                                    <f:selectItem itemValue="true" itemLabel="Visible" />
+                                    <f:selectItem itemValue="false" itemLabel="Hidden" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_include_column_create_edit"
+                                               value="Can Edit" />
+                                <p:selectOneRadio id="add_include_column_create_edit"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.edit}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_include_column_create_filterable"
+                                               value="Column Filter" />
+                                <p:selectOneRadio id="add_include_column_create_filterable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.filterable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+
+                                <p:outputLabel for="add_include_column_create_sortable"
+                                               value="Column Sort" />
+                                <p:selectOneRadio id="add_include_column_create_sortable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.sortable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_include_column_create_toggleable"
+                                               value="Toggleable" />
+                                <p:selectOneRadio id="add_include_column_create_toggleable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.toggleable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_include_column_create_exportable"
+                                               value="Column Export" />
+                                <p:selectOneRadio id="add_include_column_create_exportable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.exportable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="add_include_column_create_resizable"
+                                               value="Column Export" />
+                                <p:selectOneRadio id="add_include_column_create_resizable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.resizable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+                            </p:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="add_include_column"
+                                                 update="growl,add_include_column"
+                                                 actionListener="#{baseColumnModelMB.createColumn}" />
+                                <p:spacer width="20" height="40" />
+                                <p:commandButton value="Reset" process="@this"
+                                                 update="growl,add_include_column">
+                                    <p:resetInput target="add_include_column" />
+                                </p:commandButton>
+                                <p:spacer width="20" />
+                                <p:commandButton value="Cancal" process="@this"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('create_new_column').hide();">
+                                    <p:resetInput target="add_include_column" />
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                </p:tabView>
+
+            </p:outputPanel>
+
+        </p:dialog>
+        <!-- modify column -->
+        <p:dialog widgetVar="modify_column" modal="false"
+                  header="Modify Columns" resizable="false">
+            <p:ajax event="close" process="@this"
+                    listener="#{baseColumnModelMB.reset()}" />
+            <p:outputPanel id="outputPanel_modfiy_column">
+                <p:tabView>
+                    <p:remoteCommand name="resetExt" process="@this"
+                                     update="outputPanel_modfiy_column"
+                                     actionListener="#{baseColumnModelMB.reset()}" />
+
+                    <p:tab title="Modfiy Ext Button"
+                           rendered="#{baseColumnModelMB.extBaseColumnModel.isExtButton}">
+                        <p:panelGrid columns="2" style="border:none;"
+                                     id="modify_button_ext">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+
+                                <p:outputLabel for="modify__mb" value="Managed Bean" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify__mb" value="#{baseColumnModelMB.managedClass}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.managedItems}" />
+                                    <p:ajax event="valueChange" update="modify_button_ext" />
+                                </p:selectOneMenu>
+                                <p:outputLabel for="modify_extType" value="Ext Type" />
+                                <p:selectOneMenu id="modify_extType"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.extType}">
+                                    <f:selectItem itemValue="button" itemLabel="Button" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Entity" />
+                                <h:outputText
+                                    value="#{baseColumnModelMB.extBaseColumnModel.entity}" />
+
+                                <p:outputLabel value="Customer Key" />
+                                <h:outputText
+                                    value="#{baseColumnModelMB.extBaseColumnModel.customsKey}" />
+
+                                <p:outputLabel for="modify_header" value="Header" />
+                                <p:inputText id="modify_header" required="true"
+                                             placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+
+                                <p:outputLabel for="modify_extFunction" value="ActionListener" />
+                                <p:autoComplete id="modify_extFunction" required="true"
+                                                placeholder="actionListener name" dropdown="true"
+                                                scrollHeight="400"
+                                                value="#{baseColumnModelMB.extBaseColumnModel.extFunction}"
+                                                completeMethod="#{baseColumnModelMB.autocompleteExtListener}" />
+
+                                <p:outputLabel for="modify_extRendered" value="Rendered" />
+                                <p:inputText id="modify_extRendered"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extRendered}" />
+
+                                <p:outputLabel for="modify_style" value="Style" />
+                                <p:inputText id="modify_style" placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="modify_extValue" value="Value" />
+                                <p:inputText id="modify_extValue" placeholder="button text"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extValue}" />
+
+
+                                <p:outputLabel for="modify_extIcon" value="Icon" />
+                                <p:inputText id="modify_extIcon"
+                                             placeholder="Default is ui-icon-search"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extIcon}" />
+
+
+                                <p:outputLabel for="modify_title" value="Title" />
+                                <p:inputText id="modify_title" placeholder="html title"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.title}" />
+
+                            </p:panelGrid>
+                            <h:panelGrid columns="1">
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        <h:outputText value="EXT Event " />
+                                    </f:facet>
+                                    <p:outputLabel for="modify_oncomplete" value="On complete" />
+                                    <p:inputText id="modify_oncomplete"
+                                                 placeholder="javascript method"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.oncomplete}" />
+
+                                    <p:outputLabel for="modify_onupdate" value="On update" />
+                                    <p:inputText id="modify_onupdate"
+                                                 placeholder="component id for update"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.onupdate}" />
+
+                                    <p:outputLabel for="modify_onsuccess" value="On success" />
+                                    <p:inputText id="modify_onsuccess"
+                                                 placeholder="javascript method"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.onsuccess}" />
+
+                                    <p:outputLabel for="modify_onstart" value="On start" />
+                                    <p:inputText id="modify_onstart"
+                                                 placeholder="javascript method"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.onstart}" />
+                                </p:panelGrid>
+                                <p:panelGrid columns="2">
+                                    <f:facet name="header">
+                                        <h:outputText value="EXT Primefaces Ajax Event " />
+                                    </f:facet>
+                                    <p:outputLabel for="modify_ajaxEvent" value="Ajax Event" />
+                                    <p:inputText id="modify_ajaxEvent"
+                                                 placeholder="eg: dialogReturn"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxEvent}" />
+
+                                    <p:outputLabel for="modify_ajaxLisenter" value="Ajax Lisenter" />
+                                    <p:inputText id="modify_ajaxLisenter" placeholder="listener"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxLisenter}" />
+
+                                    <p:outputLabel for="modify_ajaxProcess" value="Ajax Process" />
+                                    <p:inputText id="modify_ajaxProcess" placeholder="component id"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxProcess}" />
+
+                                    <p:outputLabel for="modify_ajaxUpdate" value="Ajax Update" />
+                                    <p:inputText id="modify_ajaxUpdate" placeholder="component id"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.ajaxUpdate}" />
+                                </p:panelGrid>
+                            </h:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="modify_button_ext"
+                                                 update="growl,modify_button_ext,baseTable:entity_table"
+                                                 oncomplete="PF('modify_column').hide();"
+                                                 actionListener="#{baseColumnModelMB.updateColumn()}" />
+                                <p:spacer width="20" height="40" />
+                                <p:spacer width="20" />
+                                <p:commandButton value="Cancal"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('modify_column').hide();" process="@this">
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="Modfiy Ext Pull Down List"
+                           rendered="#{baseColumnModelMB.extBaseColumnModel.isExtSelect}">
+
+                        <p:panelGrid columns="2" style="border:none;"
+                                     id="modify_pull_down_ext">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+
+                                <p:outputLabel for="modify_pull_down_ext_mb"
+                                               value="Managed Bean" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify_pull_down_ext_mb"
+                                                 value="#{baseColumnModelMB.managedClass}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.managedItems}" />
+                                    <p:ajax event="valueChange" update="modify_pull_down_ext"
+                                            listener="#{baseColumnModelMB.resetManagedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_pull_down_create_extType"
+                                               value="Ext Type" />
+                                <p:selectOneMenu id="modify_pull_down_create_extType"
+                                                 required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.extType}">
+                                    <f:selectItem itemValue="select" itemLabel="Pull Down List" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_pull_down_create_entity"
+                                               value="Entity" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify_pull_down_create_entity" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.entity}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.entityItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_pull_down_create_customerKey"
+                                               value="Customer Key" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify_pull_down_create_customerKey" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.customsKey}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.customeKeyItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_pull_down_create_header"
+                                               value="Header" />
+                                <p:inputText id="modify_pull_down_create_header" required="true"
+                                             placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+                                <p:outputLabel for="modify_pull_down_create_dropDown"
+                                               rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                               value="Cell DropDown" />
+                                <p:inputText id="modify_pull_down_create_dropDown"
+                                             required="true" placeholder="SelectItems[]"
+                                             rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.dropDown}" />
+
+                                <p:outputLabel for="modify_pull_down_create_dropDowns"
+                                               rendered="#{baseColumnModelMB.hasManagerBean}"
+                                               value="Cell DropDown" />
+                                <p:selectOneMenu id="modify_pull_down_create_dropDowns"
+                                                 required="true" rendered="#{baseColumnModelMB.hasManagerBean}"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.dropDown}">
+                                    <f:selectItems value="#{baseColumnModelMB.managedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_pull_down_create_field" value="Field" />
+                                <p:inputText id="modify_pull_down_create_field" required="true"
+                                             placeholder="Entity Field"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.field}" />
+
+
+                                <p:outputLabel for="modify_pull_down_create_extRendered"
+                                               value="Rendered" />
+                                <p:inputText id="modify_pull_down_create_extRendered"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.extRendered}" />
+
+                                <p:outputLabel for="modify_pull_down_create_style" value="Style" />
+                                <p:inputText id="modify_pull_down_create_style"
+                                             placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="modify_pull_down_create_title" value="Title" />
+                                <p:inputText id="modify_pull_down_create_title"
+                                             placeholder="html title"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.title}" />
+
+                            </p:panelGrid>
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="EXT Event " />
+                                </f:facet>
+                                <p:outputLabel for="modify_pull_down_create_oncomplete"
+                                               value="On complete" />
+                                <p:inputText id="modify_pull_down_create_oncomplete"
+                                             placeholder="javascript method"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.oncomplete}" />
+
+                                <p:outputLabel for="modify_pull_down_create_onupdate"
+                                               value="On update" />
+                                <p:inputText id="modify_pull_down_create_onupdate"
+                                             placeholder="value change update id"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.onupdate}" />
+
+                                <p:outputLabel for="modify_pull_down_create_onsuccess"
+                                               value="On success" />
+                                <p:inputText id="modify_pull_down_create_onsuccess"
+                                             placeholder="javascript method"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.onsuccess}" />
+
+                                <p:outputLabel for="modify_pull_down_create_onstart"
+                                               value="On start" />
+                                <p:inputText id="modify_pull_down_create_onstart"
+                                             placeholder="javascript method"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.onstart}" />
+                            </p:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="modify_pull_down_ext"
+                                                 update="growl,modify_pull_down_ext,baseTable:entity_table"
+                                                 oncomplete="PF('modify_column').hide();"
+                                                 actionListener="#{baseColumnModelMB.updateColumn()}" />
+                                <p:spacer width="20" height="40" />
+                                <p:commandButton value="Cancal"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('modify_column').hide();" process="@this">
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="Modfiy Column"
+                           rendered="#{!baseColumnModelMB.extBaseColumnModel.hasExtFunction}">
+                        <p:panelGrid columns="2" style="border:none;"
+                                     id="modify_add_column">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+
+                                <p:outputLabel for="modify_add_column_create_mb"
+                                               value="Managed Bean" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify_add_column_create_mb"
+                                                 value="#{baseColumnModelMB.managedClass}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.managedItems}" />
+                                    <p:ajax event="valueChange" update="modify_add_column"
+                                            listener="#{baseColumnModelMB.resetManagedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Entity" />
+                                <h:outputText
+                                    value="#{baseColumnModelMB.extBaseColumnModel.entity}" />
+
+                                <p:outputLabel for="modify_add_column_create_customerKey"
+                                               value="Customer Key" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify_add_column_create_customerKey" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.customsKey}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.customeKeyItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_add_column_create_header"
+                                               value="Header" />
+                                <p:inputText id="modify_add_column_create_header"
+                                             required="true" placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+                                <p:outputLabel for="modify_add_column_create_field"
+                                               value="Field" />
+                                <p:inputText id="modify_add_column_create_field" required="true"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.field}" />
+
+                                <p:outputLabel for="modify_add_column_create_dataType"
+                                               value="Data Type" />
+                                <p:selectOneMenu id="modify_add_column_create_dataType"
+                                                 required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.dataType}">
+                                    <f:selectItems value="#{baseColumnModelMB.dataTypeItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_add_column_create_tableColumn"
+                                               value="Table Column" />
+                                <p:inputText id="modify_add_column_create_tableColumn"
+                                             placeholder="Column in Table "
+                                             value="#{baseColumnModelMB.extBaseColumnModel.tableColumn}" />
+
+                                <p:outputLabel for="modify_add_column_create_dropDown"
+                                               rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                               value="Cell DropDown" />
+                                <p:inputText id="modify_add_column_create_dropDown"
+                                             placeholder="SelectItems[]"
+                                             rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.dropDown}" />
+
+                                <p:outputLabel for="modify_add_column_create_dropDowns"
+                                               rendered="#{baseColumnModelMB.hasManagerBean}"
+                                               value="Cell DropDown" />
+                                <p:selectOneMenu id="modify_add_column_create_dropDowns"
+                                                 rendered="#{baseColumnModelMB.hasManagerBean}"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.dropDown}">
+                                    <f:selectItems value="#{baseColumnModelMB.managedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_add_column_create_filterOptions"
+                                               rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                               value="Filter DropDown" />
+                                <p:inputText id="modify_add_column_create_filterOptions"
+                                             placeholder="SelectItems[]"
+                                             rendered="#{!baseColumnModelMB.hasManagerBean}"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.filterOptions}" />
+
+                                <p:outputLabel for="modify_add_column_create_filterOptionsz"
+                                               rendered="#{baseColumnModelMB.hasManagerBean}"
+                                               value="Filter DropDown" />
+                                <p:selectOneMenu id="modify_add_column_create_filterOptionsz"
+                                                 rendered="#{baseColumnModelMB.hasManagerBean}"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.filterOptions}">
+                                    <f:selectItems value="#{baseColumnModelMB.managedBeanFields}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_add_column_create_title"
+                                               value="Title" />
+                                <p:inputText id="modify_add_column_create_title"
+                                             placeholder="html title"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.title}" />
+
+                                <p:outputLabel for="modify_add_column_create_sort" value="Sort" />
+                                <p:inputText id="modify_add_column_create_sort"
+                                             placeholder="sort"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.sort}" />
+
+                                <p:outputLabel for="add_column_create_outFormat"
+                                               value="Out Format" />
+                                <p:inputText id="add_column_create_outFormat"
+                                             placeholder="support Date and Digital Type"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.outFormat}" />
+
+                                <p:outputLabel for="modify_add_column_create_filterPlaceHolder"
+                                               value="Filter PlaceHolder" />
+                                <p:inputText id="modify_add_column_create_filterPlaceHolder"
+                                             placeholder="Filter PlaceHolder"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.filterPlaceHolder}" />
+
+                            </p:panelGrid>
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="EXT Options" />
+                                </f:facet>
+                                <p:outputLabel for="modify_add_column_create_visible"
+                                               value="Visible" />
+                                <p:selectOneRadio id="modify_add_column_create_visible"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.visible}">
+                                    <f:selectItem itemValue="true" itemLabel="Visible" />
+                                    <f:selectItem itemValue="false" itemLabel="Hidden" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_edit"
+                                               value="Can Edit" />
+                                <p:selectOneRadio id="modify_add_column_create_edit"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.edit}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_filterable"
+                                               value="Column Filter" />
+                                <p:selectOneRadio id="modify_add_column_create_filterable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.filterable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_sortable"
+                                               value="Column Sort" />
+                                <p:selectOneRadio id="modify_add_column_create_sortable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.sortable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_toggleable"
+                                               value="Toggleable" />
+                                <p:selectOneRadio id="modify_add_column_create_toggleable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.toggleable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_exportable"
+                                               value="Column Export" />
+                                <p:selectOneRadio id="modify_add_column_create_exportable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.exportable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_resizable"
+                                               value="Column Resiz" />
+                                <p:selectOneRadio id="modify_add_column_create_resizable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.resizable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_isMultiFilter"
+                                               value="Multi Select Filter" />
+                                <p:selectOneRadio id="modify_add_column_create_isMultiFilter"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.isMultiFilter}">
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_add_column_create_style"
+                                               value="Style" />
+                                <p:inputText id="modify_add_column_create_style"
+                                             placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="modify_add_column_create_styleClass"
+                                               value="Css Class" />
+                                <p:inputText id="modify_add_column_create_styleClass"
+                                             placeholder="css class"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.styleClass}" />
+                            </p:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="modify_add_column"
+                                                 update="growl,modify_add_column,baseTable:entity_table"
+                                                 actionListener="#{baseColumnModelMB.updateColumn()}"
+                                                 oncomplete="PF('modify_column').hide();" />
+                                <p:spacer width="20" height="40" />
+                                <p:commandButton value="Cancal" process="@this"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('modify_column').hide();">
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                    <p:tab title="Modify Include Column"
+                           rendered="#{baseColumnModelMB.extBaseColumnModel.isExtInclude}">
+                        <p:panelGrid columns="2" style="border:none;"
+                                     id="modify_include_column">
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="Base Info" />
+                                </f:facet>
+                                <p:outputLabel for="modify_include_column_extType"
+                                               value="Ext Type" />
+                                <p:selectOneMenu id="modify_include_column_extType"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.extType}">
+                                    <f:selectItem itemValue="include" itemLabel="UI Include" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_include_column_create_entity"
+                                               value="Entity" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify_include_column_create_entity" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.entity}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.entityItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_include_column_create_customerKey"
+                                               value="Customer Key" />
+                                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                                 id="modify_include_column_create_customerKey" required="true"
+                                                 value="#{baseColumnModelMB.extBaseColumnModel.customsKey}">
+                                    <f:selectItem itemLabel="-select-" />
+                                    <f:selectItems value="#{baseColumnModelMB.customeKeyItems}" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="modify_include_column_create_include"
+                                               value="UI Include src" />
+                                <p:inputText id="modify_include_column_create_include"
+                                             required="true" placeholder="path for xhtml file"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.include}" />
+
+                                <p:outputLabel for="modify_include_column_create_sort"
+                                               value="Sort" />
+                                <p:inputText id="modify_include_column_create_sort"
+                                             placeholder="sort"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.sort}" />
+
+                                <p:outputLabel for="modify_include_column_create_header"
+                                               value="Header" />
+                                <p:inputText id="modify_include_column_create_header"
+                                             required="true" placeholder="Column Header"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.header}" />
+
+                                <p:outputLabel for="modify_include_column_create_style"
+                                               value="Style" />
+                                <p:inputText id="modify_include_column_create_style"
+                                             placeholder="css style"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.style}" />
+
+                                <p:outputLabel for="modify_include_column_create_styleClass"
+                                               value="Css Class" />
+                                <p:inputText id="modify_include_column_create_styleClass"
+                                             placeholder="css class"
+                                             value="#{baseColumnModelMB.extBaseColumnModel.styleClass}" />
+                            </p:panelGrid>
+                            <p:panelGrid columns="2">
+                                <f:facet name="header">
+                                    <h:outputText value="EXT Options" />
+                                </f:facet>
+                                <p:outputLabel for="modify_include_column_create_visible"
+                                               value="Visible" />
+                                <p:selectOneRadio id="modify_include_column_create_visible"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.visible}">
+                                    <f:selectItem itemValue="true" itemLabel="Visible" />
+                                    <f:selectItem itemValue="false" itemLabel="Hidden" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_include_column_create_edit"
+                                               value="Can Edit" />
+                                <p:selectOneRadio id="modify_include_column_create_edit"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.edit}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_include_column_create_filterable"
+                                               value="Column Filter" />
+                                <p:selectOneRadio id="modify_include_column_create_filterable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.filterable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+
+                                <p:outputLabel for="modify_include_column_create_sortable"
+                                               value="Column Sort" />
+                                <p:selectOneRadio id="modify_include_column_create_sortable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.sortable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_include_column_create_toggleable"
+                                               value="Toggleable" />
+                                <p:selectOneRadio id="modify_include_column_create_toggleable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.toggleable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_include_column_create_exportable"
+                                               value="Column Export" />
+                                <p:selectOneRadio id="modify_include_column_create_exportable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.exportable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+
+                                <p:outputLabel for="modify_include_column_create_resizable"
+                                               value="Column Export" />
+                                <p:selectOneRadio id="modify_include_column_create_resizable"
+                                                  value="#{baseColumnModelMB.extBaseColumnModel.resizable}">
+                                    <f:selectItem itemValue="true" itemLabel="Yes" />
+                                    <f:selectItem itemValue="false" itemLabel="No" />
+                                </p:selectOneRadio>
+                            </p:panelGrid>
+                            <f:facet name="footer">
+                                <p:commandButton value="Save" process="modify_include_column"
+                                                 update="growl,modify_include_column"
+                                                 actionListener="#{baseColumnModelMB.updateColumn}" />
+                                <p:spacer width="20" height="40" />
+                                <p:commandButton value="Reset" process="@this"
+                                                 update="growl,modify_include_column">
+                                    <p:resetInput target="modify_include_column" />
+                                </p:commandButton>
+                                <p:spacer width="20" />
+                                <p:commandButton value="Cancal" process="@this"
+                                                 actionListener="#{baseColumnModelMB.reset()}"
+                                                 oncomplete="PF('create_new_column').hide();">
+                                    <p:resetInput target="modify_include_column" />
+                                </p:commandButton>
+                                <br />
+                                <br />
+                            </f:facet>
+                        </p:panelGrid>
+                    </p:tab>
+                </p:tabView>
+            </p:outputPanel>
+
+        </p:dialog>
+    </h:form>
+    <script>
+// 		$('').ready(function(){
+// 			$('tbody[id$="entity_table_scrollableTbody"] tr').each(function(){
+// 				//console.log($(this).css('height'));
+// // 				var rowH = $(this).find('td').first().css('height');
+// 				var rowH = $(this).css('height');
+// 				var rowK = $(this).attr('data-rk');
+// 				var $freezeRow = $('tr[data-rk="'+rowK+'"]').first();
+// 				$freezeRow.find('td').each(function(){
+// 					$(this).css({'height':rowH,'color':'red',width:'auto'});
+// 					});
+// 			});
+
+
+// 		});
+    </script>
+</ui:composition>

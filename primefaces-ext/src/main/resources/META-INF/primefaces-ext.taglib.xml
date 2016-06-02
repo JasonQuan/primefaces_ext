@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<facelet-taglib version="2.0"
+                xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd">
+    <namespace>http://primefaces.org/ui/ext</namespace>
+    <tag>
+        <tag-name>column</tag-name>
+        <component>
+            <component-type>com.primefaces.ext.component.Column</component-type>
+        </component>
+    </tag>
+    <tag>
+        <tag-name>exporter</tag-name>
+        <handler-class>
+            com.primefaces.ext.base.exporter.ExporterTagHandler
+        </handler-class>
+        <attribute>
+            <description>Server side id of the datatable whose data would be exported.</description>
+            <name>target</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Export type: "xls","pdf","csv", "xml".</description>
+            <name>type</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Filename of the generated export file, defaults to datatable server side id.</description>
+            <name>fileName</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>Exports only current page instead of whole dataset.</description>
+            <name>pageOnly</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>PreProcessor for the exported document.</description>
+            <name>preProcessor</name>
+            <required>false</required>
+            <type>javax.el.MethodExpression</type>
+        </attribute>
+        <attribute>
+            <description>PostProcessor for the exported document.</description>
+            <name>postProcessor</name>
+            <required>false</required>
+            <type>javax.el.MethodExpression</type>
+        </attribute>
+        <attribute>
+            <description>Character encoding to use.</description>
+            <name>encoding</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description>When enabled, only selection would be exported.</description>
+            <name>selectionOnly</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description>When enabled, dynamic datatables would be exported.</description>
+            <name>repeat</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+    
+</facelet-taglib>

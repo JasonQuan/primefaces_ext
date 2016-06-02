@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    <ordering>
+        <after>
+            <name>primefaces</name>
+        </after>
+    </ordering>  
+    <factory>
+        <exception-handler-factory>com.primefaces.ext.base.web.ViewExpriedExceptionHandlerImpl</exception-handler-factory>
+    </factory>
+    <application>
+        <el-resolver>com.primefaces.ext.base.web.DynamicDataTableExtendBeanElResolver</el-resolver>
+        <resource-handler>com.primefaces.ext.base.web.FaceletsResourcesResolver</resource-handler>
+        <action-listener>org.primefaces.application.DialogActionListener</action-listener>
+        <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+        <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
+    </application>
+
+    <converter>
+        <converter-id>com.primefaces.ext.converter.BooleanConverter</converter-id>
+        <converter-class>com.primefaces.ext.converter.BooleanConverter</converter-class>
+    </converter>
+</faces-config>
