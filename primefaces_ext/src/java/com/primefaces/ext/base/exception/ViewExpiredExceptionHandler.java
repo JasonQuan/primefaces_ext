@@ -18,8 +18,8 @@ import javax.faces.render.RenderKitFactory;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
-import org.jboss.logging.Logger;
 import org.primefaces.context.RequestContext;
 
 /**
