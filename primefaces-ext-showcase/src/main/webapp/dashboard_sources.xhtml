@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:b="http://xmlns.jcp.org/jsf/composite/b"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
@@ -10,7 +9,7 @@
     </h:head>
     <h:body>
 
-        <p:tabView>
+        <p:tabView styleClass="souces">
             <p:tab title="XHTML page">
                 <pre name="code" class="xml">#{showcaseUtil.getFileContent('/dashboard.xhtml')}</pre>
             </p:tab>
