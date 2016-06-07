@@ -19,6 +19,20 @@
             <groupId>com.primefaces.ext</groupId>
             <artifactId>primefaces-ext</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>  
+                <exclusion>  
+                    <groupId>org.eclipse.persistence</groupId>  
+                    <artifactId>javax.persistence</artifactId>  
+                </exclusion>  
+                <exclusion>  
+                    <groupId>org.glassfish</groupId>  
+                    <artifactId>javax.faces</artifactId>  
+                </exclusion>  
+                <exclusion>  
+                    <groupId>com.github.virtuald</groupId>  
+                    <artifactId>curvesapi</artifactId>  
+                </exclusion>  
+            </exclusions> 
         </dependency>
         <dependency>
             <groupId>javax</groupId>
