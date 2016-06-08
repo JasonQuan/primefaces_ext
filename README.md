@@ -1,7 +1,11 @@
 # primefaces_ext
+this extension build with netbeans, run on glassfish
+
 dynamic column for primefaces data table
 
-dome on youtube
+demo on line http://ext.primefaces.cn
+
+demo on youtube
 
 part1: https://youtu.be/pdM9EzH1PXo
 
