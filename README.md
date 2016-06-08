@@ -1,5 +1,5 @@
 # primefaces_ext
-this extension build with netbeans, run on glassfish
+this extensions build with netbeans, run on glassfish
 
 dynamic column for primefaces data table
 
