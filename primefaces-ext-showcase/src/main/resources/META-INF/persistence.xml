@@ -13,12 +13,12 @@
         <validation-mode>NONE</validation-mode>
         <properties>
             <property name="eclipselink.session.customizer" value="com.primefaces.ext.base.util.UUIDSequence"/>
-            <property name="eclipselink.logging.level.sql" value="FINE"/>
+<!--            <property name="eclipselink.logging.level.sql" value="FINE"/>
             <property name="eclipselink.logging.level" value="FINEST"/>
             <property name="eclipselink.logging.parameters" value="true"/>
-            <property name="hibernate.show_sql" value=""/>
+            <property name="hibernate.show_sql" value=""/>-->
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
-            <property name="javax.persistence.sql-load-script-source" value="META-INF/init_dashboard.sql"/>
+            <property name="javax.persistence.sql-load-script-source" value="META-INF/init_test_data.sql"/>
         </properties>
     </persistence-unit>
 </persistence>
