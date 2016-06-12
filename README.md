@@ -1,4 +1,11 @@
 # primefaces_ext
+
+base on primefaces 5.3.12
+support
+
+1. dynamic column
+2. export sort, custome header
+
 this extensions build with netbeans, run on glassfish
 
 dynamic column for primefaces data table
