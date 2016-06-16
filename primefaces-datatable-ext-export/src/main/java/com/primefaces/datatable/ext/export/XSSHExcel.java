@@ -128,7 +128,7 @@ public class XSSHExcel extends Exporter {
             if (col.isRendered() && col.isExportable()) {
                 UIComponent facet = col.getFacet(columnType.facet());
                 if (facet != null) {
-                    addColumnValue(rowHeader, facet, ((ExtColumn) col).getExportSort());
+                    addColumnFacetValue(rowHeader, facet, ((ExtColumn) col));
                 } else {
                     String textValue;
 //                    switch (columnType) {
@@ -149,9 +149,14 @@ public class XSSHExcel extends Exporter {
         }
     }
 
-    protected void addColumnValue(Row row, UIComponent component, int cellIndex) {
-        String value = component == null ? "" : exportValue(FacesContext.getCurrentInstance(), component);
-        addColumnValue(row, value, cellIndex);
+    protected void addColumnFacetValue(Row row, UIComponent component, ExtColumn co) {
+        if(co.getExportHeader() != null && co.getExportHeader().length() > 0){
+            addColumnValue(row, co.getExportHeader(), co.getExportSort());
+        }else{
+            String value = component == null ? "" : exportValue(FacesContext.getCurrentInstance(), component);
+            //TODO: replace all html code
+            addColumnValue(row, value.replace("<br/>", ""), co.getExportSort());
+        }
     }
 
     protected void addColumnValue(Row row, String value, int cellIndex) {

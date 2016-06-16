@@ -32,7 +32,15 @@ public class ExtColumn extends Column {
         return (java.lang.Integer) getStateHelper().eval(PropertyKeys.exportSort, 0);
     }
 
-    public void setExportSort(int _styleClass) {
-        getStateHelper().put(PropertyKeys.exportSort, _styleClass);
+    public void setExportSort(int _in) {
+        getStateHelper().put(PropertyKeys.exportSort, _in);
+    }
+
+    public java.lang.String getExportHeader() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.exportHeader, null);
+    }
+
+    public void setExportHeader(String _in) {
+        getStateHelper().put(PropertyKeys.exportHeader, _in);
     }
 }
