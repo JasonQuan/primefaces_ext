@@ -1,2 +1,5 @@
 /primefaces-ext/target/
 /primefaces-ext-showcase/target/
+primefaces-ext/nb-configuration.xml
+/primefaces-datatable-ext-export/target/
+primefaces-ext/faces-config.NavData
