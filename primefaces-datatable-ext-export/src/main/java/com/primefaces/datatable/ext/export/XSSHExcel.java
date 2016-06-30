@@ -2,6 +2,8 @@ package com.primefaces.datatable.ext.export;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.List;
 
@@ -206,8 +208,8 @@ public class XSSHExcel extends Exporter {
         externalContext.responseFlushBuffer();
     }
 
-    protected String getContentDisposition(String filename) {
-        return "attachment;filename=" + filename + ".xlsx";
+    protected String getContentDisposition(String filename) throws UnsupportedEncodingException {
+        return "attachment;filename=" + URLEncoder.encode(filename, "UTF-8") + ".xlsx";
     }
 
     public void exportTable(FacesContext context, DataTable table, Sheet sheet, boolean pageOnly, boolean selectionOnly) {
