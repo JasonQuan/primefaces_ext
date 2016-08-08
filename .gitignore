@@ -3,3 +3,4 @@
 primefaces-ext/nb-configuration.xml
 /primefaces-datatable-ext-export/target/
 primefaces-ext/faces-config.NavData
+primefaces-datatable-ext-export/faces-config.NavData

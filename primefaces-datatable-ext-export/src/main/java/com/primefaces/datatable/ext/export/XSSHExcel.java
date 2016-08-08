@@ -145,16 +145,20 @@ public class XSSHExcel extends Exporter {
 //                            textValue = "";
 //                            break;
 //                    }
-                    addColumnValue(rowHeader, textValue, ((ExtColumn) col).getExportSort());
+                    if (col instanceof ExtColumn) {
+                        addColumnValue(rowHeader, textValue, ((ExtColumn) col).getExportSort());
+                    } else {
+                        addColumnValue(rowHeader, textValue, 0);
+                    }
                 }
             }
         }
     }
 
     protected void addColumnFacetValue(Row row, UIComponent component, ExtColumn co) {
-        if(co.getExportHeader() != null && co.getExportHeader().length() > 0){
+        if (co.getExportHeader() != null && co.getExportHeader().length() > 0) {
             addColumnValue(row, co.getExportHeader(), co.getExportSort());
-        }else{
+        } else {
             String value = component == null ? "" : exportValue(FacesContext.getCurrentInstance(), component);
             //TODO: replace all html code
             addColumnValue(row, value.replace("<br/>", ""), co.getExportSort());
